@@ -1,4 +1,5 @@
 ﻿using MCGalaxy;
+using System;
 using System.Collections.Generic;
 
 namespace DesertCube
@@ -19,6 +20,7 @@ namespace DesertCube
         public volatile static float TotalDistance = 0f;
 
         public static float RemainingDistance {get { return (Config.DestinationDistance - TotalDistance); }}
+        public static int RemainingDistanceKilometers { get { return (int)Math.Ceiling(RemainingDistance / 1000f); } }
 
         public List<Command> Commands = new List<Command>()
         {

@@ -1,5 +1,6 @@
 ﻿using MCGalaxy;
 using MCGalaxy.Commands;
+using System;
 
 namespace DesertCube.Commands
 {
@@ -34,7 +35,7 @@ namespace DesertCube.Commands
                 return;
             }
             p.Message($"%eThe Bus has travelled %d{(int)DesertCubePlugin.TotalDistance}%e meters!");
-            p.Message($"%eThere's %d{(int)DesertCubePlugin.RemainingDistance/1000}%ekm until Vegas!");
+            p.Message($"%eThere's %d{DesertCubePlugin.RemainingDistanceKilometers}%ekm until Vegas!");
         }
     }
 }

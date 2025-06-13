@@ -20,8 +20,7 @@ namespace DesertCube.Modules.Server
 
         static void OnHeartbeat(Heartbeat service, ref string name)
         {
-            name += DesertCubePlugin.Config.ServerNameSuffix.Replace("%d",  ((int)(DesertCubePlugin.RemainingDistance/1000)).ToString());
-            //MCGalaxy.Player.Console.Message(name);
+            name += DesertCubePlugin.Config.ServerNameSuffix.Replace("%d", DesertCubePlugin.RemainingDistanceKilometers.ToString());
         }
     }
 }
