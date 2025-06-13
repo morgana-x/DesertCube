@@ -34,7 +34,7 @@ namespace DesertCube.Commands
                 return;
             }
             p.Message($"%eThe Bus has travelled %d{(int)DesertCubePlugin.TotalDistance}%e meters!");
-            p.Message($"%eThere's %d{(int)DesertCubePlugin.RemainingDistance} %emeters until Vegas!");
+            p.Message($"%eThere's %d{(int)DesertCubePlugin.RemainingDistance/1000}%ekm until Vegas!");
         }
     }
 }

@@ -9,7 +9,7 @@ namespace DesertCube
         public float BusAcceleration { get; set; } = 3f;  // meters per second
         public float BusDecceleration { get; set; } = 1f; // meters per second
 
-        public int DestinationDistance { get; set; } = 648000; // Meters
+        public int DestinationDistance { get; set; } = 580000; // Meters
 
         public string ServerNameSuffix { get; set; } = " | %dkm left until vegas!!!";
 
