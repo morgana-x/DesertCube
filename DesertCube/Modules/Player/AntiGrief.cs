@@ -11,11 +11,13 @@ namespace DesertCube.Modules.Player
         {
             OnBlockChangingEvent.Register(EventPlayerBlockChange, Priority.High);
             OnPlayerSpawningEvent.Register(EventPlayerSpawn, Priority.High);
+            OnSentMapEvent.Register(EventSentMap, Priority.High);   
         }
         public static void Unload()
         {
             OnBlockChangingEvent.Unregister(EventPlayerBlockChange);
             OnPlayerSpawningEvent.Unregister(EventPlayerSpawn);
+            OnSentMapEvent.Unregister(EventSentMap);
         }
 
         private static bool CanBuild(MCGalaxy.Player p)
@@ -37,7 +39,7 @@ namespace DesertCube.Modules.Player
             p.RevertBlock(x, y, z);
         }
 
-        private static void EventPlayerSpawn(MCGalaxy.Player player, ref Position pos, ref byte yaw, ref byte pitch, bool respawning)
+        private static void SendBlockPerms(MCGalaxy.Player player)
         {
             if (!player.Session.hasCpe) return;
             if (CanBuild(player)) return;
@@ -48,6 +50,18 @@ namespace DesertCube.Modules.Player
             for (int i = 0; i < 256; i++)
                 bulk.AddRange(Packet.BlockPermission((ushort)i, false, false, player.Session.hasExtBlocks));
             player.Send(bulk.ToArray());
+
+
+        }
+        private static void EventSentMap(MCGalaxy.Player player, Level lvlprev, Level lvl)
+        {
+            SendBlockPerms(player);
+            Inventory.SendInventory(player);
+        }
+        private static void EventPlayerSpawn(MCGalaxy.Player player, ref Position pos, ref byte yaw, ref byte pitch, bool respawning)
+        {
+            SendBlockPerms(player);
+            Inventory.SendInventory(player);
         }
     }
 }

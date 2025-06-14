@@ -21,11 +21,13 @@ namespace DesertCube.Modules.Player
         {
             Database.CreateTable(TableName, DesertBusPlayerTable);
             OnPlayerSpawningEvent.Register(EventPlayerSpawn, Priority.High);
+            OnSentMapEvent.Register(EventSentMap, Priority.Normal);
 
         }
         public static void Unload()
         {
             OnPlayerSpawningEvent.Unregister(EventPlayerSpawn);
+            OnSentMapEvent.Unregister(EventSentMap);
         }
 
         public static Dictionary<ushort, ushort> GetInventory(string player)
@@ -42,6 +44,9 @@ namespace DesertCube.Modules.Player
                 [73] = 1,
                 [74] = 1,
                 [75] = 1,
+                [76] = 1,
+                [77] = 1,
+                [78] = 1,
             };
             if (Cache.ContainsKey(player)) return Cache[player];
 
@@ -98,8 +103,9 @@ namespace DesertCube.Modules.Player
             Database.UpdateRows(TableName, "inventory=@0", "WHERE name=@1", inventorystr, player);
         }
 
-        private static void EventPlayerSpawn(MCGalaxy.Player player, ref Position pos, ref byte yaw, ref byte pitch, bool respawning)
+        public static void SendInventory(MCGalaxy.Player player)
         {
+            if (player.Level != DesertCubePlugin.Bus.Level) return;
             if (!player.Session.hasCpe) return;
 
             List<byte> bulk = new List<byte>();
@@ -120,11 +126,18 @@ namespace DesertCube.Modules.Player
             for (int i = 0; i < 256; i++)
             {
                 bool has = (i < inventory.Count);
-                bulk.AddRange(Packet.SetInventoryOrder(has ? inventory.Keys.ElementAt(i) : (ushort)0, (ushort)(has ? x : 256), player.Session.hasExtBlocks));
+                bulk.AddRange(Packet.SetInventoryOrder(has ? inventory.Keys.ElementAt(i) : (ushort)0, (ushort)(has ? x : i), player.Session.hasExtBlocks));
                 if (has) x++;
             }
             player.Send(bulk.ToArray());
-
+        }
+        static void EventSentMap(MCGalaxy.Player plyaer, Level prev, Level cur)
+        {
+            SendInventory(plyaer);
+        }
+        private static void EventPlayerSpawn(MCGalaxy.Player player, ref Position pos, ref byte yaw, ref byte pitch, bool respawning)
+        {
+            SendInventory(player);
         }
     }
 }
