@@ -30,6 +30,19 @@ namespace DesertCube.Modules.Player
 
         public static Dictionary<ushort, ushort> GetInventory(string player)
         {
+            return new Dictionary<ushort, ushort>()
+            {
+                [66] = 1,
+                [67] = 1,
+                [68] = 1,
+                [69] = 1,
+                [70] = 1,
+                [71] = 1,
+                [72] = 1,
+                [73] = 1,
+                [74] = 1,
+                [75] = 1,
+            };
             if (Cache.ContainsKey(player)) return Cache[player];
 
             Dictionary<ushort, ushort> inv = new Dictionary<ushort, ushort>();
@@ -99,12 +112,17 @@ namespace DesertCube.Modules.Player
 
             var inventory = GetInventory(player.name);
 
-
             if (player.Game.Referee) return;
+
             // Send Inventory Order
             bulk.Clear();
+            int x = 0;
             for (int i = 0; i < 256; i++)
-                bulk.AddRange(Packet.SetInventoryOrder((i < inventory.Count) ? inventory.Keys.ElementAt(i) : (ushort)0, (ushort)i, player.Session.hasExtBlocks));
+            {
+                bool has = (i < inventory.Count);
+                bulk.AddRange(Packet.SetInventoryOrder(has ? inventory.Keys.ElementAt(i) : (ushort)0, (ushort)(has ? x : 256), player.Session.hasExtBlocks));
+                if (has) x++;
+            }
             player.Send(bulk.ToArray());
 
         }

@@ -48,6 +48,8 @@ namespace DesertCube
 
             Modules.Desert.Stop.Load();
 
+            Modules.Item.Snacks.Load();
+
             Modules.Player.AntiGrief.Load();
             Modules.Player.Hint.Load();
             Modules.Player.Hold.Load();
@@ -69,6 +71,8 @@ namespace DesertCube
             Modules.Server.Name.Unload();
 
             Modules.Desert.Stop.Unload();
+
+            Modules.Item.Snacks.Unload();
 
             Modules.Player.AntiGrief.Unload();
             Modules.Player.Hint.Unload();

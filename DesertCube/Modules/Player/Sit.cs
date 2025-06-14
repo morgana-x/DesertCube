@@ -35,7 +35,7 @@ namespace DesertCube.Modules.Player
                 string model = IsSeated(player) ? "sit" : "humanoid";
 
                 if (player.Model == model) continue;
-
+                if (model == "humanoid" && player.Model.StartsWith("hold")) continue;
                 player.UpdateModel(model);
             }
         }

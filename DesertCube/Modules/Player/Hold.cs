@@ -23,13 +23,11 @@ namespace DesertCube.Modules.Player
 
             foreach (var player in PlayerInfo.Online.Items)
             {
-                if (player.Model == "sit") continue;
-
-                int holding = player.GetHeldBlock();
+                int holding = player.Model == "sit" ? 0 : player.GetHeldBlock();
                 if (player.Extras.GetInt("HeldBlock") == holding)  continue;
                 player.Extras["HeldBlock"] = holding;
 
-                bool has = (!Inventory.GetInventory(player.name).ContainsKey((ushort)holding));
+                bool has = true;// (!Inventory.GetInventory(player.name).ContainsKey((ushort)holding));
 
                 if (holding >= 66) holding = (holding - 256);
                 string model = (holding == 0 || !has)? "humanoid" : $"hold|1.{holding.ToString("D3")}";
