@@ -20,6 +20,25 @@ namespace DesertCube.Commands
 
         public override void Use(Player p, string message)
         {
+            string[] args = message.Split(' ');
+
+            if (p.Rank >= LevelPermission.Owner && message.Length > 0 && args.Length > 0)
+            {
+                if (!float.TryParse(args[0], out var newdist))
+                {
+                    p.Message("Invalid distance");
+                    return;
+                }
+                Modules.Desert.Stop.nextStopMeters = (int)(DesertCubePlugin.TotalDistance + (newdist * 1000));
+                p.Message("Set distance to " + args[0] + "km");
+                if (args.Length > 1)
+                {
+                    Modules.Desert.Stop.nextStop = args[1];
+                    p.Message("Set next stop to " + args[1]);
+                }
+                return;
+            }
+
             p.Message($"%eThe next stop is %d{Math.Ceiling(((Modules.Desert.Stop.nextStopMeters - DesertCubePlugin.TotalDistance) / 1000)).ToString("0")}%ekm away!");
         }
     }

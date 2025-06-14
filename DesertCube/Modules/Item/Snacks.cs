@@ -23,6 +23,7 @@ namespace DesertCube.Modules.Item
             AddSnack(75, "Water", 111, 13);
             AddSnack(76, "Coin", 108, 14);
             AddSnack(77, "$10 Note", 107, 15);
+            AddSnack(78, "Pasta", 106, 10); // for the italians :D
 
             AddEffect(10, 200, 141, 77, 2); // Food
             AddEffect(11, 249, 129, 0, 3); // OJ
