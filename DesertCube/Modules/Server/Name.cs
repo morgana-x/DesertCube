@@ -7,8 +7,8 @@ namespace DesertCube.Modules.Server
         static string oldsoftwarename = "";
         public static void Load()
         {
-            string oldsoftwarename = MCGalaxy.Server.SoftwareNameVersioned;
-            MCGalaxy.Server.SoftwareName = "&eDesert Bus &b0.1&f";
+            oldsoftwarename = MCGalaxy.Server.SoftwareNameVersioned;
+            MCGalaxy.Server.SoftwareName = DesertCubePlugin.SoftwareNameVersioned;
             MCGalaxy.Events.ServerEvents.OnSendingHeartbeatEvent.Register(OnHeartbeat, MCGalaxy.Priority.High);
         }
 

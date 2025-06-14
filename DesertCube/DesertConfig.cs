@@ -13,7 +13,7 @@ namespace DesertCube
 
         public string ServerNameSuffix { get; set; } = " | %dkm left until vegas!!!";
 
-        static string SaveFolder { get { return Directory.GetCurrentDirectory()  + "/plugins/DesertBus"; } }
+        public static string SaveFolder { get { return Directory.GetCurrentDirectory()  + "/plugins/DesertBus"; } }
         static string SaveFile { get { return $"{SaveFolder}/config.txt"; } }
         
         public static DesertConfig Load()

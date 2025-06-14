@@ -24,6 +24,8 @@ namespace DesertCube.DesertBus
         public Vec3U16 Max = new Vec3U16(72, 50, 64);
 
         DateTime nextDecel = DateTime.Now;
+
+        public DateTime stopUntil = DateTime.Now;
         public DesertBus(string level)
         {
             SetLevel(level);
@@ -79,7 +81,12 @@ namespace DesertCube.DesertBus
         {
             tickTask = task;
 
-            DesertCubePlugin.TotalDistance += BusSpeed / 2;
+            if (DesertCubePlugin.TotalDistance >= Modules.Desert.Stop.nextStopMeters)
+            {
+                SetSpeed(0);
+                Modules.Desert.Stop.ArriveBusStop();
+                return;
+            }
 
             if (DesertCubePlugin.RemainingDistance <= 0)
             {
@@ -93,6 +100,10 @@ namespace DesertCube.DesertBus
                 return;
             }
 
+
+
+            DesertCubePlugin.TotalDistance += BusSpeed / 2;
+
             if (DateTime.Now > nextDecel)
             {
                 nextDecel = DateTime.Now.AddSeconds(1);
@@ -103,7 +114,8 @@ namespace DesertCube.DesertBus
         public void Accelerate(float amount)
         {
             if (BusSpeed >= DesertCubePlugin.Config.BusMaxSpeed) return;
-
+            if (DateTime.Now < stopUntil) return;
+            if (BusSpeed == 0) { Modules.Desert.Stop.ClearBusStop(this.Level); }
             float speed = BusSpeed + amount;
 
             if (speed > DesertCubePlugin.Config.BusMaxSpeed)
@@ -154,10 +166,17 @@ namespace DesertCube.DesertBus
 
         public void SetSpeed(float speed)
         {
+            if (speed == 0 && BusSpeed != 0) { Modules.Desert.Stop.ArriveBusStop(); }
             BusSpeed = speed;
             SendBusSpeedAll();
 
             SetDoor(speed == 0 ? (ushort)0 : (ushort)49);
+        }
+
+        public void Broadcast(string message)
+        {
+            foreach(var p in GetPlayers())
+                p.Message(message);
         }
     }
 }

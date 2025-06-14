@@ -15,6 +15,8 @@ namespace DesertCube.Modules.Player
             new ColumnDesc("inventory", ColumnType.VarChar, 1024)
         };
         private const string TableName = "desertbus_inventory";
+
+        public static Dictionary<string, Dictionary<ushort, ushort>> Cache = new Dictionary<string, Dictionary<ushort, ushort>>();
         public static void Load()
         {
             Database.CreateTable(TableName, DesertBusPlayerTable);
@@ -28,6 +30,8 @@ namespace DesertCube.Modules.Player
 
         public static Dictionary<ushort, ushort> GetInventory(string player)
         {
+            if (Cache.ContainsKey(player)) return Cache[player];
+
             Dictionary<ushort, ushort> inv = new Dictionary<ushort, ushort>();
 
             List<string[]> pRows = Database.GetRows(TableName, "*", "WHERE name=@0", player);
@@ -44,11 +48,17 @@ namespace DesertCube.Modules.Player
                 inv.Add(id, amount);
             }
 
+            Cache.Add(player, inv);
             return inv;
         }
 
         public static void SaveInventory(string player, Dictionary<ushort, ushort> inv)
         {
+            if (Cache.ContainsKey(player))
+                Cache[player] = inv;
+            else
+                Cache.Add(player, inv);
+
             byte[] rawinventory = new byte[inv.Count * 4];
             for (int i=0; i < inv.Count; i++)
             {

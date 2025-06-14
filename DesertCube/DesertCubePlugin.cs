@@ -8,10 +8,15 @@ namespace DesertCube
     {
         public override string name { get { return "DesertCube"; } }
         public override string MCGalaxy_Version { get { return "1.9.5.3"; } }
-        public override int build { get { return 1; } }
+        public override int build { get { return 2; } }
         public override string welcome { get { return "DesertCube loaded!"; } }
         public override string creator { get { return "morgana"; } }
         public override bool LoadAtStartup { get { return true; } }
+
+        public static string Version = "0.2";
+
+        public static string SoftwareName = "&eDesert Bus";
+        public static string SoftwareNameVersioned { get {  return $"{SoftwareName} &b{Version}&f"; } }
 
         public static DesertBus.DesertBus Bus;
 
@@ -29,6 +34,8 @@ namespace DesertCube
             new DesertCube.Commands.Points(),
             new DesertCube.Commands.Leaderboard(),
             new DesertCube.Commands.BusDistance(),
+            new DesertCube.Commands.BusStopSave(),
+            new DesertCube.Commands.BusNextStop(),
         };
         public override void Load(bool startup)
         {
@@ -36,15 +43,20 @@ namespace DesertCube
 
             Bus = new DesertBus.DesertBus(Config.BusLevel);
 
+            Modules.Server.Journey.Load();
+            Modules.Server.Name.Load();
+
+            Modules.Desert.Stop.Load();
+
             Modules.Player.AntiGrief.Load();
             Modules.Player.Hint.Load();
+            Modules.Player.Hold.Load();
             Modules.Player.Inventory.Load();
             Modules.Player.LeaveBehind.Load();
             Modules.Player.Sit.Load();
             Modules.Player.Stats.Load();
+            Modules.Player.StatusHud.Load();
 
-            Modules.Server.Journey.Load();
-            Modules.Server.Name.Load();
 
             foreach(var cmd in this.Commands)
                 Command2.Register(cmd);
@@ -53,15 +65,20 @@ namespace DesertCube
         {
             Bus.Unload();
 
+            Modules.Server.Journey.Unload();
+            Modules.Server.Name.Unload();
+
+            Modules.Desert.Stop.Unload();
+
             Modules.Player.AntiGrief.Unload();
             Modules.Player.Hint.Unload();
+            Modules.Player.Hold.Unload();
             Modules.Player.Inventory.Unload();
             Modules.Player.LeaveBehind.Unload();
             Modules.Player.Sit.Unload();
             Modules.Player.Stats.Unload();
+            Modules.Player.StatusHud.Unload();
 
-            Modules.Server.Journey.Unload();
-            Modules.Server.Name.Unload();
 
             foreach (var cmd in this.Commands)
                 MCGalaxy.Command2.Unregister(cmd);
