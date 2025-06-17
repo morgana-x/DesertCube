@@ -122,7 +122,7 @@ namespace DesertCube.Modules.Player
 
             // Send Inventory Order
             bulk.Clear();
-            int x = 0;
+            int x = 1;
             for (int i = 0; i < 256; i++)
             {
                 bool has = (i < inventory.Count);

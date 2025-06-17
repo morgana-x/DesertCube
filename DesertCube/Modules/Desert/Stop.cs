@@ -1,8 +1,10 @@
-﻿using MCGalaxy;
+﻿using ICSharpCode.SharpZipLib.GZip;
+using MCGalaxy;
 using MCGalaxy.Tasks;
 using System;
-using System.ComponentModel;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace DesertCube.Modules.Desert
 {
@@ -44,10 +46,20 @@ namespace DesertCube.Modules.Desert
                 DesertCubePlugin.Bus.Broadcast($"%eThat's enough of this %cboring %eplace! %cBack on the road!"); }, null, TimeSpan.FromSeconds(minutes));
         }
 
+        static byte[] GZIPHeader = { 0x1F, 0x8B };
+
+
+        public static bool BusStopExists(string name)
+        {
+            name = name.EndsWith(".stop") ? name : name + ".stop";
+            return File.Exists($"{DesertConfig.SaveFolder}/stops/{name}");
+        }
+
+
         public static void LoadBusStop(MCGalaxy.Level level, string name)
         {
          
-            if (loaded) ClearBusStop(level);
+            ClearBusStop(level);
 
             string folder = $"{DesertConfig.SaveFolder}/stops";
             string path = $"{folder}/{name}.stop";
@@ -58,8 +70,19 @@ namespace DesertCube.Modules.Desert
             byte[] bytes = File.ReadAllBytes(path);
             MCGalaxy.Player.Console.Message($"Read {bytes.Length} bytes");
             MemoryStream stream = new MemoryStream(bytes);
-         
-            BinaryReader br = new BinaryReader(stream);
+            MemoryStream outStream = stream;
+
+            // If this is a compressed .stop
+            byte[] buffer = new byte[2];
+            stream.Read(buffer, 0, 2);
+            if (buffer.SequenceEqual(GZIPHeader))
+            {
+                outStream = new MemoryStream();
+                stream.Position = 0;
+                GZip.Decompress(stream, outStream, false);
+            }
+
+            BinaryReader br = new BinaryReader(outStream);
             MCGalaxy.Player.Console.Message($"Reading data...");
             br.BaseStream.Position = 0;
             ushort width = br.ReadUInt16();
@@ -73,11 +96,51 @@ namespace DesertCube.Modules.Desert
                     {
                         var block = br.ReadUInt16();
                         if (block == 0) continue;
-                     //   MCGalaxy.Player.Console.Message($"Placing block {block} at {x} {y+16} {z}");
+                        if (z >= 48 && z <= 71) continue;
+                        //MCGalaxy.Player.Console.Message($"Placing block {block} at {x} {y+16} {z}");
                         level.UpdateBlock(MCGalaxy.Player.Console, x, (ushort)(y+16), z, block);
                     }
 
             loaded = true;
+        }
+        public static void SaveBusStop(Level level, string name)
+        {
+            List<byte> data = new List<byte>();
+
+            ushort width = level.Width;
+            ushort height = (ushort)(level.Height - 16);
+            ushort length = level.Length;
+
+            data.AddRange(BitConverter.GetBytes(width));
+            data.AddRange(BitConverter.GetBytes(height));
+            data.AddRange(BitConverter.GetBytes(length));
+
+            for (int x = 0; x < width; x++)
+                for (int y = 0; y < height; y++)
+                    for (int z = 0; z < length; z++)
+                    {
+                        if (z >= 48 && z <= 71)
+                        {
+                            data.AddRange(BitConverter.GetBytes((ushort)0));
+                            continue;
+                        }
+                        var block = level.GetBlock((ushort)x, (ushort)(y+16), (ushort)z);
+                        data.AddRange(BitConverter.GetBytes(block));
+                    }
+
+      
+            var instream = new MemoryStream(data.ToArray());
+            var outstream = new MemoryStream();
+            instream.Position = 0;
+            GZip.Compress(instream, outstream, false);
+
+
+            string folder = $"{DesertConfig.SaveFolder}/stops";
+            string path = $"{folder}/{name}.stop";
+            if (!Directory.Exists(folder))
+                Directory.CreateDirectory(folder);
+
+            File.WriteAllBytes(path, outstream.ToArray());
         }
 
         static System.Random rnd = new System.Random();
@@ -98,11 +161,13 @@ namespace DesertCube.Modules.Desert
 
         public static void ClearBusStop(Level level)
         {
-            if (!loaded) return;
+            if (level == null) return;
             for (ushort x = 0; x < level.Width; x++)
                 for (ushort y = 16; y < level.Height; y++)
-                    for (ushort z = 0; z < 47; z++)
+                    for (ushort z = 0; z < level.Length; z++)
                     {
+                        if (z >= 48 && z <= 71) continue;
+                        if (level.GetBlock(x, y, z) == 0) continue;
                         level.UpdateBlock(MCGalaxy.Player.Console, x, y, z, 0);
                     }
         }

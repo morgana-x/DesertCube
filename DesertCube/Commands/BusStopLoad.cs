@@ -2,16 +2,16 @@
 
 namespace DesertCube.Commands
 {
-    public class BusStopSave : Command2
+    public class BusStopLoad : Command2
     {
-        public override string name => "busstopsave";
+        public override string name => "busstopload";
 
         public override string type => "building";
 
         public override LevelPermission defaultRank => LevelPermission.Owner;
         public override void Help(Player p)
         {
-            p.Message("/busstopsave name");
+            p.Message("/busstopload name");
         }
 
         public override void Use(Player p, string message)
@@ -20,9 +20,15 @@ namespace DesertCube.Commands
             if (name.Trim() == "")
                 p.Message("Can't have an empty name!");
 
-            Modules.Desert.Stop.SaveBusStop(p.level, name);
+            if (!Modules.Desert.Stop.BusStopExists(name))
+            {
+                p.Message($"Bus stop \"{name}\" doesn't exist!");
+                return;
+            }
 
-            p.Message($"Saved the bus stop to {name}.stop");
+            Modules.Desert.Stop.LoadBusStop(p.level, name);
+
+            p.Message($"Loaded the bus stop {name}.stop");
         }
     }
 }

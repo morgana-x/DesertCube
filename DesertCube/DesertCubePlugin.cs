@@ -29,11 +29,14 @@ namespace DesertCube
 
         public List<Command> Commands = new List<Command>()
         {
-            new DesertCube.Commands.BusLevel(),
-            new DesertCube.Commands.BusSpeed(),
             new DesertCube.Commands.Points(),
             new DesertCube.Commands.Leaderboard(),
+
+            new DesertCube.Commands.BusLevel(),
+            new DesertCube.Commands.BusSpeed(),
             new DesertCube.Commands.BusDistance(),
+
+            new DesertCube.Commands.BusStopLoad(),
             new DesertCube.Commands.BusStopSave(),
             new DesertCube.Commands.BusNextStop(),
         };
@@ -51,6 +54,7 @@ namespace DesertCube
             Modules.Item.Snacks.Load();
 
             Modules.Player.AntiGrief.Load();
+            Modules.Player.Effect.Load();
             Modules.Player.Hint.Load();
             Modules.Player.Hold.Load();
             Modules.Player.Inventory.Load();
@@ -75,6 +79,7 @@ namespace DesertCube
             Modules.Item.Snacks.Unload();
 
             Modules.Player.AntiGrief.Unload();
+            Modules.Player.Effect.Unload();
             Modules.Player.Hint.Unload();
             Modules.Player.Hold.Unload();
             Modules.Player.Inventory.Unload();

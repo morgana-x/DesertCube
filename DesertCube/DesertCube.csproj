@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="SharpZipLib" Version="1.4.2" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Reference Include="goodlyeffects">
       <HintPath>..\..\..\..\Desktop\mcgalaxy_server_blank\plugins\goodlyeffects.dll</HintPath>
     </Reference>
