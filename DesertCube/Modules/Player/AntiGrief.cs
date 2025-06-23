@@ -22,20 +22,13 @@ namespace DesertCube.Modules.Player
 
         private static bool CanBuild(MCGalaxy.Player p)
         {
-            return p.Rank >= LevelPermission.Operator || p.Level != DesertCubePlugin.Bus.Level;
+            return (p.Game.Referee) || p.Level != DesertCubePlugin.Bus.Level;
         }
         private static void EventPlayerBlockChange(MCGalaxy.Player p, ushort x, ushort y, ushort z, ushort block, bool placing, ref bool cancel)
         {
             if (CanBuild(p)) return;
 
             cancel = true;
-
-            if (p.Session.hasCpe) // Hacked client most likely as we sent block permission packets
-            {
-                p.Kick("Having fun grrr");
-                return;
-            }
-
             p.RevertBlock(x, y, z);
         }
 
@@ -50,8 +43,6 @@ namespace DesertCube.Modules.Player
             for (int i = 0; i < 256; i++)
                 bulk.AddRange(Packet.BlockPermission((ushort)i, false, false, player.Session.hasExtBlocks));
             player.Send(bulk.ToArray());
-
-
         }
         private static void EventSentMap(MCGalaxy.Player player, Level lvlprev, Level lvl)
         {

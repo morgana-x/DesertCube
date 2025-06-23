@@ -60,6 +60,7 @@ namespace DesertCube
             Modules.Player.Inventory.Load();
             Modules.Player.LeaveBehind.Load();
             Modules.Player.Sit.Load();
+            Modules.Player.Sound.Load();
             Modules.Player.Stats.Load();
             Modules.Player.StatusHud.Load();
 
@@ -85,6 +86,7 @@ namespace DesertCube
             Modules.Player.Inventory.Unload();
             Modules.Player.LeaveBehind.Unload();
             Modules.Player.Sit.Unload();
+            Modules.Player.Sound.Unload();
             Modules.Player.Stats.Unload();
             Modules.Player.StatusHud.Unload();
 

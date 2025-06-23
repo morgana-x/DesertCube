@@ -116,9 +116,9 @@ namespace DesertCube.Modules.Player
                 bulk.AddRange(Packet.SetHotbar(0, (byte)i, player.Session.hasExtBlocks));
             player.Send(bulk.ToArray());
 
-            var inventory = GetInventory(player.name);
-
             if (player.Game.Referee) return;
+
+            var inventory = GetInventory(player.name);
 
             // Send Inventory Order
             bulk.Clear();

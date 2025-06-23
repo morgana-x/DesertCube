@@ -9,6 +9,7 @@ namespace DesertCube.Modules.Item
     public class Snacks
     {
         static Dictionary<ushort, byte> ParticleEffects = new Dictionary<ushort, byte>();
+        static Dictionary<ushort, Sound.SoundDefinition> SoundEffects = new Dictionary<ushort, Sound.SoundDefinition>();
         public static void Load()
         {
             AddSnack(66, "Crossiant", 89, 18);
@@ -18,10 +19,10 @@ namespace DesertCube.Modules.Item
             AddSnack(70, "Pizza", 93, 10);
             AddSnack(71, "Chocolate", 94, 17);
             AddSnack(72, "Hamburger", 95, 10);
-            AddSnack(73, "Orange juice", 109, 11);
-            AddSnack(74, "Beer", 110, 12);
-            AddSnack(75, "Water", 111, 13);
-            AddSnack(76, "Coin", 108, 14);
+            AddSnack(73, "Orange juice", 109, 11, LiquidSound);
+            AddSnack(74, "Beer", 110, 12, LiquidSound);
+            AddSnack(75, "Water", 111, 13, LiquidSound);
+            AddSnack(76, "Coin", 108, 14, CoinSound);
             AddSnack(77, "$10 Note", 107, 15);
             AddSnack(78, "Pasta", 106, 10); // for the italians :D
 
@@ -47,17 +48,34 @@ namespace DesertCube.Modules.Item
         {
             if (btn != MouseButton.Right) return;
             var block = Block.ToRaw(p.ClientHeldBlock);
-            if (!ParticleEffects.ContainsKey(block)) return;
-            Effect.EmitEffect(p, ParticleEffects[block]);
+
+            if (ParticleEffects.ContainsKey(block))
+                Effect.EmitEffect(p, ParticleEffects[block]);
+
+            if (SoundEffects.ContainsKey(block))
+                Sound.EmitBlockSound(p, SoundEffects[block]);
         }
 
-        public static void AddSnack(ushort Id, string Name, ushort Texture, byte Particle)
+        static Sound.SoundDefinition DefaultSound = new Sound.SoundDefinition(0, SoundType.Sand, 70, 255);
+
+        static Sound.SoundDefinition LiquidSound = new Sound.SoundDefinition(0, SoundType.Snow, 110, 255);
+
+        static Sound.SoundDefinition CoinSound = new Sound.SoundDefinition(0, SoundType.Metal, 180, 255);
+
+        public static void AddSnack(ushort Id, string Name, ushort Texture, byte Particle, Sound.SoundDefinition sound = null)
         {
             AddBlockItem(Id, Name, Texture);
 
             if (!ParticleEffects.ContainsKey(Id))
                 ParticleEffects.Add(Id, Particle);
             ParticleEffects[Id] = Particle;
+
+            if (sound == null) sound = DefaultSound;
+
+            if (!SoundEffects.ContainsKey(Id))
+                SoundEffects.Add(Id, sound);
+            SoundEffects[Id] = sound;
+
         }
         
         public static void AddBlockItem(ushort Id, string Name, ushort Texture, bool admin = false)
