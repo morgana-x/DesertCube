@@ -116,18 +116,21 @@ namespace DesertCube.Modules.Player
                 bulk.AddRange(Packet.SetHotbar(0, (byte)i, player.Session.hasExtBlocks));
             player.Send(bulk.ToArray());
 
-            if (player.Game.Referee) return;
-
             var inventory = GetInventory(player.name);
 
             // Send Inventory Order
             bulk.Clear();
 
             ushort x = 1;
-            for (ushort i = 0; i < 256; i++)
+            for (ushort i = 0; i < player.level.CustomBlockDefs.Length; i++)
             {
-                bool has = inventory.ContainsKey(i);
-                bulk.AddRange(Packet.SetInventoryOrder(i, has ? x : (ushort)0, player.Session.hasExtBlocks));
+                if (i >= Block.MaxRaw) break;
+                var def = player.level.CustomBlockDefs[i];
+                if (i > Block.CPE_MAX_BLOCK && (  def == null || def.RawID > Block.MaxRaw)) continue;
+
+                var block = Block.ToRaw(i);
+                bool has = player.Game.Referee || inventory.ContainsKey(block);
+                bulk.AddRange(Packet.SetInventoryOrder(block, has ? x : (ushort)0, player.Session.hasExtBlocks));
                 if (has) x++;
             }
             player.Send(bulk.ToArray());

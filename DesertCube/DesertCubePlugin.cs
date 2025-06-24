@@ -66,8 +66,9 @@ namespace DesertCube
             Modules.Player.Stats.Load();
             Modules.Player.StatusHud.Load();
 
+            Modules.Vegas.Gamble.Load();
 
-            foreach(var cmd in this.Commands)
+            foreach (var cmd in this.Commands)
                 Command2.Register(cmd);
         }
         public override void Unload(bool shutdown)
@@ -93,6 +94,8 @@ namespace DesertCube
             Modules.Player.Sound.Unload();
             Modules.Player.Stats.Unload();
             Modules.Player.StatusHud.Unload();
+
+            Modules.Vegas.Gamble.Unload();
 
 
             foreach (var cmd in this.Commands)

@@ -2,6 +2,7 @@
 using MCGalaxy;
 using MCGalaxy.Network;
 using System.Collections.Generic;
+using MCGalaxy.Commands.Fun;
 
 namespace DesertCube.Modules.Player
 {
@@ -11,12 +12,14 @@ namespace DesertCube.Modules.Player
         {
             OnBlockChangingEvent.Register(EventPlayerBlockChange, Priority.High);
             OnPlayerSpawningEvent.Register(EventPlayerSpawn, Priority.High);
+            OnPlayerActionEvent.Register(EventPlayerAction, Priority.High);
             OnSentMapEvent.Register(EventSentMap, Priority.High);   
         }
         public static void Unload()
         {
             OnBlockChangingEvent.Unregister(EventPlayerBlockChange);
             OnPlayerSpawningEvent.Unregister(EventPlayerSpawn);
+            OnPlayerActionEvent.Unregister(EventPlayerAction);
             OnSentMapEvent.Unregister(EventSentMap);
         }
 
@@ -32,10 +35,12 @@ namespace DesertCube.Modules.Player
             p.RevertBlock(x, y, z);
         }
 
+       
         private static void SendBlockPerms(MCGalaxy.Player player)
         {
             if (!player.Session.hasCpe) return;
-            if (CanBuild(player)) return;
+            if (CanBuild(player)) { player.SendCurrentBlockPermissions(); return; }
+    
 
             List<byte> bulk = new List<byte>();
             // Send Can Break/Place Order
@@ -43,6 +48,14 @@ namespace DesertCube.Modules.Player
             for (int i = 0; i < 256; i++)
                 bulk.AddRange(Packet.BlockPermission((ushort)i, false, false, player.Session.hasExtBlocks));
             player.Send(bulk.ToArray());
+        }
+        private static void EventPlayerAction(MCGalaxy.Player player, PlayerAction action, string message, bool stealth)
+        {
+            if (action != PlayerAction.Referee && action != PlayerAction.UnReferee) return;
+            player.Game.Referee = (action == PlayerAction.Referee);
+            MCGalaxy.Player.Console.Message($"Player is ref {player.Game.Referee}");
+            SendBlockPerms(player);
+            Inventory.SendInventory(player);
         }
         private static void EventSentMap(MCGalaxy.Player player, Level lvlprev, Level lvl)
         {

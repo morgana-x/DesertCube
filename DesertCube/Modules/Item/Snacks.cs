@@ -13,19 +13,19 @@ namespace DesertCube.Modules.Item
         static Dictionary<ushort, Sound.SoundDefinition> SoundEffects = new Dictionary<ushort, Sound.SoundDefinition>();
         public static void Load()
         {
-            AddSnack(66, "Crossiant", 89, 18);
+            AddSnack(66, "Crossiant", 89, 18, DefaultSound);
             AddSnack(67, "Cookie", 90, 10, CookieSound);
-            AddSnack(68, "Bread", 91, 18);
+            AddSnack(68, "Bread", 91, 18, DefaultSound);
             AddSnack(69, "Chips", 92, 16, ChipSound);
             AddSnack(70, "Pizza", 93, 10, PizzaSound);
             AddSnack(71, "Chocolate", 94, 17, ChocolateSound);
-            AddSnack(72, "Hamburger", 95, 10);
-            AddSnack(73, "Orange juice", 109, 11, LiquidSound);
-            AddSnack(74, "Beer", 110, 12, LiquidSound);
-            AddSnack(75, "Water", 111, 13, LiquidSound);
+            AddSnack(72, "Hamburger", 95, 10, DefaultSound);
+            AddSnack(73, "Orange juice", 109, 11);
+            AddSnack(74, "Beer", 110, 12);
+            AddSnack(75, "Water", 111, 13);
             AddSnack(76, "Coin", 108, 14, CoinSound);
-            AddSnack(77, "$10 Note", 107, 15);
-            AddSnack(78, "Pasta", 106, 10); // for the italians :D
+            AddSnack(77, "$10 Note", 107, 15, DefaultSound);
+            AddSnack(78, "Pasta", 106, 10, DefaultSound); // for the italians :D
 
             Modules.Player.Effect.AddEffect(10, 200, 141, 77, 2); // Food
             Modules.Player.Effect.AddEffect(11, 249, 129, 0, 3); // OJ
@@ -76,7 +76,7 @@ namespace DesertCube.Modules.Item
 
         static Sound.SoundDefinition ChipSound = new Sound.SoundDefinition(0, SoundType.Gravel, 130, volume);
 
-        static Sound.SoundDefinition CookieSound = new Sound.SoundDefinition(0, SoundType.Gravel, 100, volume);
+        static Sound.SoundDefinition CookieSound = new Sound.SoundDefinition(0, SoundType.Metal, 150, volume);
 
         static Sound.SoundDefinition ChocolateSound = new Sound.SoundDefinition(0, SoundType.Cloth, 150, volume);
 
@@ -88,7 +88,7 @@ namespace DesertCube.Modules.Item
                 ParticleEffects.Add(Id, Particle);
             ParticleEffects[Id] = Particle;
 
-            if (sound == null) sound = DefaultSound;
+            if (sound == null) return;
 
             if (!SoundEffects.ContainsKey(Id))
                 SoundEffects.Add(Id, sound);
