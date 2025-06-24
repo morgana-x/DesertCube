@@ -1,3 +1,7 @@
+Textures:
+	- items
+		- Ludinko
+		
 Stops:
 	- bar.stop
 		- ScrantonWorkBus
