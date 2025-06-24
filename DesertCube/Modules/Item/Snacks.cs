@@ -44,7 +44,7 @@ namespace DesertCube.Modules.Item
             MCGalaxy.Events.PlayerEvents.OnPlayerClickEvent.Unregister(OnPlayerClick);
         }
 
-        static float cooldown = 0.18f;
+        static float cooldown = 0.35f;
         static void OnPlayerClick(MCGalaxy.Player p, MouseButton btn, MouseAction action, ushort yaw, ushort pitch, byte entityID, ushort x, ushort y, ushort z, TargetBlockFace face)
         {
             if (!p.Session.ClientName().ToLower().Contains("android") &&
