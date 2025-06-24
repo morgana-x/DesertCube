@@ -1,4 +1,5 @@
-﻿using MCGalaxy;
+﻿using DesertCube.Modules.Server;
+using MCGalaxy;
 using MCGalaxy.Commands;
 using System;
 
@@ -29,7 +30,7 @@ namespace DesertCube.Commands
                     p.Message("Invalid distance");
                     return;
                 }
-                Modules.Desert.Stop.nextStopMeters = (int)(DesertCubePlugin.TotalDistance + (newdist * 1000));
+                Modules.Desert.Stop.nextStopMeters = (int)(Journey.TotalDistance + (newdist * 1000));
                 p.Message("Set distance to " + args[0] + "km");
                 if (args.Length > 1)
                 {
@@ -39,7 +40,7 @@ namespace DesertCube.Commands
                 return;
             }
 
-            p.Message($"%eThe next stop is %d{Math.Ceiling(((Modules.Desert.Stop.nextStopMeters - DesertCubePlugin.TotalDistance) / 1000)).ToString("0")}%ekm away!");
+            p.Message($"%eThe next stop is %d{Math.Ceiling(((Modules.Desert.Stop.nextStopMeters - Journey.TotalDistance) / 1000)).ToString("0")}%ekm away!");
         }
     }
 }

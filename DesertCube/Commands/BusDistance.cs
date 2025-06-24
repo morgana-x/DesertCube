@@ -1,4 +1,5 @@
-﻿using MCGalaxy;
+﻿using DesertCube.Modules.Server;
+using MCGalaxy;
 using MCGalaxy.Commands;
 using System;
 
@@ -30,12 +31,14 @@ namespace DesertCube.Commands
                     p.Message($"\"{args[0]}\" isn't a valid distance integer!");
                     return;
                 }
-                DesertCubePlugin.TotalDistance = newdist;
+                Journey.TotalDistance = newdist;
                 p.Message($"%eSet the total distance to %d{newdist}%e!");
                 return;
             }
-            p.Message($"%eThe Bus has travelled %d{(int)DesertCubePlugin.TotalDistance}%e meters!");
-            p.Message($"%eThere's %d{DesertCubePlugin.RemainingDistanceKilometers}%ekm until Vegas!");
+
+            var diststring = Journey.TotalDistance < 1000 ? $"{(int)Journey.TotalDistance}%e meters" : $"{(int)Journey.TotalDistanceKilometers}%ekm";
+            p.Message($"%eThe Bus has travelled %d{diststring}%e!");
+            p.Message($"%eThere's %d{Journey.RemainingDistanceKilometers}%ekm until {Journey.Destination}!");
         }
     }
 }

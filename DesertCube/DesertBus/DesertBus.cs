@@ -1,4 +1,5 @@
-﻿using MCGalaxy;
+﻿using DesertCube.Modules.Server;
+using MCGalaxy;
 using MCGalaxy.Events.PlayerEvents;
 using MCGalaxy.Maths;
 using MCGalaxy.Network;
@@ -81,16 +82,16 @@ namespace DesertCube.DesertBus
         {
             tickTask = task;
 
-            if (DesertCubePlugin.TotalDistance >= Modules.Desert.Stop.nextStopMeters)
+            if (Journey.TotalDistance >= Modules.Desert.Stop.nextStopMeters)
             {
                 SetSpeed(0);
                 Modules.Desert.Stop.ArriveBusStop();
                 return;
             }
 
-            if (DesertCubePlugin.RemainingDistance <= 0)
+            if (Journey.RemainingDistance <= 0)
             {
-                DesertCubePlugin.TotalDistance = 0;
+                Journey.TotalDistance = 0;
                 foreach (var player in GetPlayers())
                 {
                     DesertCube.Modules.Player.Stats.AddPoints(player.name, 1); // wow!!
@@ -102,7 +103,7 @@ namespace DesertCube.DesertBus
 
 
 
-            DesertCubePlugin.TotalDistance += BusSpeed / 2;
+            Journey.TotalDistance += BusSpeed / 2;
 
             if (DateTime.Now > nextDecel)
             {

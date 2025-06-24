@@ -1,4 +1,5 @@
-﻿using ICSharpCode.SharpZipLib.GZip;
+﻿using DesertCube.Modules.Server;
+using ICSharpCode.SharpZipLib.GZip;
 using MCGalaxy;
 using MCGalaxy.Tasks;
 using System;
@@ -16,7 +17,7 @@ namespace DesertCube.Modules.Desert
         public static string nextStop = "";
         public static void Load()
         {
-            nextStopMeters = (int)DesertCubePlugin.TotalDistance + rnd.Next(10000, 50000);
+            nextStopMeters = (int)Journey.TotalDistance + rnd.Next(10000, 50000);
             nextStop = RandomStop();
         }
 
@@ -28,13 +29,13 @@ namespace DesertCube.Modules.Desert
 
         public static void ArriveBusStop()
         {
-            if (DesertCubePlugin.TotalDistance < nextStopMeters) return;
+            if (Journey.TotalDistance < nextStopMeters) return;
 
             if (nextStop != "")
                 LoadBusStop(DesertCubePlugin.Bus.Level, nextStop);
 
 
-            nextStopMeters = (int)DesertCubePlugin.TotalDistance + rnd.Next(10000, 50000);
+            nextStopMeters = (int)Journey.TotalDistance + rnd.Next(10000, 50000);
             nextStop = RandomStop();
 
             if (!loaded) return;

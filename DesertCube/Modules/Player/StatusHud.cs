@@ -1,4 +1,5 @@
-﻿using MCGalaxy;
+﻿using DesertCube.Modules.Server;
+using MCGalaxy;
 using MCGalaxy.Tasks;
 using System;
 
@@ -20,7 +21,7 @@ namespace DesertCube.Modules.Player
 
         static string GetStatus1Message()
         {
-            return $"%3{(DesertCubePlugin.Bus.BusSpeed * 3.6f).ToString("0")}%7km/h %3{DesertCubePlugin.RemainingDistanceKilometers}%7km";
+            return $"%3{(DesertCubePlugin.Bus.BusSpeed * 3.6f).ToString("0")}%7km/h %3{Journey.RemainingDistanceKilometers}%7km";
         }
 
         static bool ShouldSeeMessage(MCGalaxy.Player player)

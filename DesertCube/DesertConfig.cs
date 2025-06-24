@@ -11,7 +11,7 @@ namespace DesertCube
 
         public int DestinationDistance { get; set; } = 580000; // Meters
 
-        public string ServerNameSuffix { get; set; } = " | %dkm left until vegas!!!";
+        public string ServerNameSuffix { get; set; } = " | %dkm left until %p!!!";
 
         public static string SaveFolder { get { return Directory.GetCurrentDirectory()  + "/plugins/DesertBus"; } }
         static string SaveFile { get { return $"{SaveFolder}/config.txt"; } }
