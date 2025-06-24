@@ -3,6 +3,7 @@ using MCGalaxy;
 using MCGalaxy.Events.PlayerEvents;
 using System.Collections.Generic;
 using DesertCube.Modules.Player;
+using System;
 
 namespace DesertCube.Modules.Item
 {
@@ -13,11 +14,11 @@ namespace DesertCube.Modules.Item
         public static void Load()
         {
             AddSnack(66, "Crossiant", 89, 18);
-            AddSnack(67, "Cookie", 90, 10);
+            AddSnack(67, "Cookie", 90, 10, CookieSound);
             AddSnack(68, "Bread", 91, 18);
-            AddSnack(69, "Chips", 92, 16);
-            AddSnack(70, "Pizza", 93, 10);
-            AddSnack(71, "Chocolate", 94, 17);
+            AddSnack(69, "Chips", 92, 16, ChipSound);
+            AddSnack(70, "Pizza", 93, 10, PizzaSound);
+            AddSnack(71, "Chocolate", 94, 17, ChocolateSound);
             AddSnack(72, "Hamburger", 95, 10);
             AddSnack(73, "Orange juice", 109, 11, LiquidSound);
             AddSnack(74, "Beer", 110, 12, LiquidSound);
@@ -43,10 +44,17 @@ namespace DesertCube.Modules.Item
             MCGalaxy.Events.PlayerEvents.OnPlayerClickEvent.Unregister(OnPlayerClick);
         }
 
-
+        static float cooldown = 0.18f;
         static void OnPlayerClick(MCGalaxy.Player p, MouseButton btn, MouseAction action, ushort yaw, ushort pitch, byte entityID, ushort x, ushort y, ushort z, TargetBlockFace face)
         {
-            if (btn != MouseButton.Right) return;
+            if (!p.Session.ClientName().ToLower().Contains("android") &&
+                btn != MouseButton.Right) 
+                return;
+
+            if (p.Extras.Contains("ItemCooldown") && ((DateTime)p.Extras["ItemCooldown"]) > DateTime.Now)
+                return;
+
+            p.Extras["ItemCooldown"] = DateTime.Now.AddSeconds(cooldown);
             var block = Block.ToRaw(p.ClientHeldBlock);
 
             if (ParticleEffects.ContainsKey(block))
@@ -56,11 +64,21 @@ namespace DesertCube.Modules.Item
                 Sound.EmitBlockSound(p, SoundEffects[block]);
         }
 
-        static Sound.SoundDefinition DefaultSound = new Sound.SoundDefinition(0, SoundType.Sand, 70, 255);
+        const byte volume = 20;
 
-        static Sound.SoundDefinition LiquidSound = new Sound.SoundDefinition(0, SoundType.Snow, 110, 255);
+        static Sound.SoundDefinition LiquidSound = new Sound.SoundDefinition(0, SoundType.Sand, 220, volume);
 
-        static Sound.SoundDefinition CoinSound = new Sound.SoundDefinition(0, SoundType.Metal, 180, 255);
+        static Sound.SoundDefinition PizzaSound = new Sound.SoundDefinition(1, SoundType.Snow, 240, volume);
+
+        static Sound.SoundDefinition DefaultSound = new Sound.SoundDefinition(0, SoundType.Snow, 150, volume);
+
+        static Sound.SoundDefinition CoinSound = new Sound.SoundDefinition(0, SoundType.Metal, 255, volume);
+
+        static Sound.SoundDefinition ChipSound = new Sound.SoundDefinition(0, SoundType.Gravel, 130, volume);
+
+        static Sound.SoundDefinition CookieSound = new Sound.SoundDefinition(0, SoundType.Gravel, 100, volume);
+
+        static Sound.SoundDefinition ChocolateSound = new Sound.SoundDefinition(0, SoundType.Cloth, 150, volume);
 
         public static void AddSnack(ushort Id, string Name, ushort Texture, byte Particle, Sound.SoundDefinition sound = null)
         {

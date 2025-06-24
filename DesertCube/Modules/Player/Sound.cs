@@ -1,18 +1,42 @@
 ﻿using MCGalaxy;
 using MCGalaxy.Blocks;
+using System;
 
 namespace DesertCube.Modules.Player
 {
     public class Sound
     {
+        const string PlaySoundCPE = "PlaySound";
         public static void Load()
         {
-            
+            AddCPE(PlaySoundCPE, "Enables server to send sounds", 1);
         }
 
         public static void Unload()
         {
 
+        }
+
+        static bool ContainsCPE(string name)
+        {
+            var cpeextensions = CpeExtension.All;
+            foreach (var c in cpeextensions)
+                if (c.Name == name) return true;
+            return false;
+        }
+
+        static void AddCPE(string name, string desc, byte version)
+        {
+            if (ContainsCPE(name)) return;
+            var all = CpeExtension.All;
+            var newextensions = new CpeExtension[all.Length + 1];
+            for (int i=0; i<all.Length; i++)
+                newextensions[i] = all[i];
+            newextensions[newextensions.Length - 1] = new CpeExtension(name, desc, version) { Enabled = true};
+
+            CpeExtension.All = newextensions;
+
+            MCGalaxy.Player.Console.Message($"Added CPE {name} \"{desc}\" v{version}");
         }
 
         public class SoundDefinition
@@ -34,7 +58,7 @@ namespace DesertCube.Modules.Player
 
         public static bool SupportsSoundCPE(MCGalaxy.Player player)
         {
-            return player.Supports("PlaySound") || player.Session.ClientName().Contains("playsound");
+            return player.Supports(PlaySoundCPE);
         }
 
         public static void EmitBlockSound(MCGalaxy.Player player, SoundDefinition sound)
@@ -49,6 +73,14 @@ namespace DesertCube.Modules.Player
         {
             EmitSound(level, channel, (ushort)id, x, y, z, volume, rate);
         }
+
+        static float distance(Position pos, ushort x, ushort y, ushort z)
+        {
+            float dx = ((pos.X / 32f) - x);
+            float dy = ((pos.Y / 32f) - y);
+            float dz = ((pos.Z / 32f) - z);
+            return (float)Math.Sqrt((dx * dx) + (dy * dy) + (dz * dz));
+        }
         public static void EmitSound(MCGalaxy.Level level, byte channel, ushort id, ushort x, ushort y, ushort z, byte volume=255, byte rate=100)
         {
             byte[] packet = ExtPlaySound3D(channel, id, x, y, z, volume, rate);
@@ -56,6 +88,8 @@ namespace DesertCube.Modules.Player
             foreach(var player in level.getPlayers())
             {
                 if (!SupportsSoundCPE(player)) continue;
+                if (distance(player.Pos, x,y,z) > (volume/2f))
+                        continue;
                 player.Send(packet);
             }
         }

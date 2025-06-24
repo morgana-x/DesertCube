@@ -122,11 +122,12 @@ namespace DesertCube.Modules.Player
 
             // Send Inventory Order
             bulk.Clear();
-            int x = 1;
-            for (int i = 0; i < 256; i++)
+
+            ushort x = 1;
+            for (ushort i = 0; i < 256; i++)
             {
-                bool has = (i < inventory.Count);
-                bulk.AddRange(Packet.SetInventoryOrder(has ? inventory.Keys.ElementAt(i) : (ushort)0, (ushort)(has ? x : i), player.Session.hasExtBlocks));
+                bool has = inventory.ContainsKey(i);
+                bulk.AddRange(Packet.SetInventoryOrder(i, has ? x : (ushort)0, player.Session.hasExtBlocks));
                 if (has) x++;
             }
             player.Send(bulk.ToArray());
