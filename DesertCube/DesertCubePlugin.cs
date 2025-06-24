@@ -46,6 +46,8 @@ namespace DesertCube
 
             Bus = new DesertBus.DesertBus(Config.BusLevel);
 
+            Modules.Chat.Cef.Load();
+
             Modules.Server.Journey.Load();
             Modules.Server.Name.Load();
 
@@ -71,6 +73,8 @@ namespace DesertCube
         public override void Unload(bool shutdown)
         {
             Bus.Unload();
+
+            Modules.Chat.Cef.Unload();
 
             Modules.Server.Journey.Unload();
             Modules.Server.Name.Unload();
