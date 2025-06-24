@@ -22,10 +22,10 @@ namespace DesertCube.Commands
             p.Message("%e=======================");
             p.Message("%eDesert Bus Leaderboard:");
             p.Message("%e=======================");
-            if (leaderboard.Count == 0)
+            if (leaderboard.Key.Length == 0)
                 p.Message("%eNoone has any points yet!");
-            for (int i = 0; i < leaderboard.Count; i++)
-                p.Message($"%e{i+1}. %7{leaderboard.Keys.ElementAt(i)} %d{leaderboard.Values.ElementAt(i)}");
+            for (int i = 0; i < leaderboard.Key.Length; i++)
+                p.Message($"%e{i+1}. %7{leaderboard.Key.ElementAt(i)} %d{leaderboard.Value.ElementAt(i)}");
             p.Message("%e=======================");
         }
     }

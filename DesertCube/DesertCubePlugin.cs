@@ -30,6 +30,7 @@ namespace DesertCube
         public List<Command> Commands = new List<Command>()
         {
             new DesertCube.Commands.Points(),
+            new DesertCube.Commands.PointsSet(),
             new DesertCube.Commands.Leaderboard(),
 
             new DesertCube.Commands.BusLevel(),

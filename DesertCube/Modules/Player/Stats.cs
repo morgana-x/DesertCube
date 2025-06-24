@@ -21,14 +21,21 @@ namespace DesertCube.Modules.Player
 
         }
 
-        public static SortedDictionary<string, int> GetPointLeaderboard(int maxentries=10)
+        public static KeyValuePair<string[], int[]> GetPointLeaderboard(int maxentries=10)
         {
-            SortedDictionary<string, int> leaderboard = new SortedDictionary<string, int>();
+            List<string> PlayerNames = new List<string>();
+            List<int> PlayerScores = new List<int>();
 
-            List<string[]> pRows = Database.GetRows(TableName, "name, points", $"LIMIT {maxentries}", "ORDER BY DESC");
-            foreach(var row in pRows)
-                leaderboard.Add(row[0], int.Parse(row[1]));
-            return leaderboard;
+            List<string[]> pRows = Database.GetRows(TableName, "name, points", $"LIMIT {maxentries}", "ORDER BY POINTS", "DESC");
+            foreach (var row in pRows)
+            {
+                PlayerScores.Add(int.Parse(row[1]));
+                PlayerNames.Add(row[0]);
+           
+            }
+
+
+            return new KeyValuePair<string[], int[]>(PlayerNames.ToArray(), PlayerScores.ToArray());
         }
         public static int GetPoints(string player)
         {
