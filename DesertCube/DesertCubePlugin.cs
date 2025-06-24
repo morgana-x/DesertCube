@@ -12,7 +12,7 @@ namespace DesertCube
         public override string creator { get { return "morgana"; } }
         public override bool LoadAtStartup { get { return true; } }
 
-        public static string Version = "0.2";
+        public static string Version = "0.3";
 
         public static string SoftwareName = "&eDesert Bus";
         public static string SoftwareNameVersioned { get {  return $"{SoftwareName} &b{Version}&f"; } }
