@@ -95,7 +95,7 @@ namespace DesertCube.DesertBus
                 foreach (var player in GetPlayers())
                 {
                     DesertCube.Modules.Player.Stats.AddPoints(player.name, 1); // wow!!
-                    player.Message("%eWow you %cno lifers %edid it! %dVegas!");
+                    player.Message($"%eWow you %cno lifers %edid it! %d{Journey.Destination}!");
                     player.Message("%eFor your troubles you get %a1%e whole point!");
                 }
                 return;
