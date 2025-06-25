@@ -38,5 +38,31 @@ namespace DesertCube.Modules.Server
                 Database.AddRow(TableName, "id, distance", 0, (ulong)(TotalDistance));
 
         }
+
+        public static void AddDistance(float meters)
+        {
+
+            TotalDistance += meters; 
+
+            if (TotalDistance >= Modules.Desert.Stop.nextStopMeters)
+            {
+                DesertCubePlugin.Bus.SetSpeed(0);
+                Modules.Desert.Stop.ArriveBusStop();
+                return;
+            }
+
+            if (RemainingDistance <= 0)
+            {
+                TotalDistance = 0;
+
+                foreach (var player in DesertCubePlugin.Bus.GetPlayers())
+                    DesertCube.Modules.Player.Stats.AddPoints(player.name, 1); // wow!!
+
+                DesertCubePlugin.Bus.Broadcast($"%eWow you %cno lifers %edid it! %d{Destination}!");
+                DesertCubePlugin.Bus.Broadcast("%eFor your troubles you get %a1%e whole point!");
+                
+                return;
+            }
+        }
     }
 }

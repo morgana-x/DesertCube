@@ -82,28 +82,7 @@ namespace DesertCube.DesertBus
         {
             tickTask = task;
 
-            if (Journey.TotalDistance >= Modules.Desert.Stop.nextStopMeters)
-            {
-                SetSpeed(0);
-                Modules.Desert.Stop.ArriveBusStop();
-                return;
-            }
-
-            if (Journey.RemainingDistance <= 0)
-            {
-                Journey.TotalDistance = 0;
-                foreach (var player in GetPlayers())
-                {
-                    DesertCube.Modules.Player.Stats.AddPoints(player.name, 1); // wow!!
-                    player.Message($"%eWow you %cno lifers %edid it! %d{Journey.Destination}!");
-                    player.Message("%eFor your troubles you get %a1%e whole point!");
-                }
-                return;
-            }
-
-
-
-            Journey.TotalDistance += BusSpeed / 2;
+            Journey.AddDistance(BusSpeed / 2f);
 
             if (DateTime.Now > nextDecel)
             {

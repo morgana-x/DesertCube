@@ -34,6 +34,8 @@ namespace DesertCube
             new DesertCube.Commands.BusStopLoad(),
             new DesertCube.Commands.BusStopSave(),
             new DesertCube.Commands.BusNextStop(),
+
+            new DesertCube.Commands.ConfigReload()
         };
         public override void Load(bool startup)
         {
