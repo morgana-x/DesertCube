@@ -15,16 +15,35 @@ namespace DesertCube.Modules.Desert
         public static int nextStopMeters = 0;
         public static bool loaded = false;
         public static string nextStop = "";
+        public static bool AtStop = false;
+
+        static SchedulerTask busstoptask;
         public static void Load()
         {
             nextStopMeters = (int)Journey.TotalDistance + rnd.Next(10000, 50000);
             nextStop = RandomStop();
+
+            busstoptask = MCGalaxy.Server.MainScheduler.QueueRepeat(BusStopTick, null, TimeSpan.FromSeconds(2));
         }
 
         public static void Unload()
         {
             if (DesertCubePlugin.Bus.Level != null)
                 ClearBusStop(DesertCubePlugin.Bus.Level);
+
+
+            MCGalaxy.Server.MainScheduler.Cancel(busstoptask);
+        }
+
+        static void BusStopTick(SchedulerTask task)
+        {
+            busstoptask = task;
+
+            if (!AtStop) return;
+            if (DateTime.Now < DesertCubePlugin.Bus.stopUntil) return;
+
+            AtStop = false;
+            DesertCubePlugin.Bus.Broadcast($"%eThat's enough of this %cboring %eplace! %cBack on the road!");
         }
 
         public static void ArriveBusStop()
@@ -43,8 +62,7 @@ namespace DesertCube.Modules.Desert
             int minutes = rnd.Next(30, 120);
             DesertCubePlugin.Bus.stopUntil = DateTime.Now.AddSeconds(minutes);
             DesertCubePlugin.Bus.Broadcast($"%eWe've arrived at a %dstop%e! We'll be here for %d{minutes}%e seconds!");
-            MCGalaxy.Server.MainScheduler.QueueOnce((SchedulerTask task) => {
-                DesertCubePlugin.Bus.Broadcast($"%eThat's enough of this %cboring %eplace! %cBack on the road!"); }, null, TimeSpan.FromSeconds(minutes));
+            AtStop = true;
         }
 
         static byte[] GZIPHeader = { 0x1F, 0x8B };
@@ -171,6 +189,7 @@ namespace DesertCube.Modules.Desert
                         if (level.GetBlock(x, y, z) == 0) continue;
                         level.UpdateBlock(MCGalaxy.Player.Console, x, y, z, 0);
                     }
+            loaded = false;
         }
     }
 }

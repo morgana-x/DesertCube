@@ -38,7 +38,7 @@ namespace DesertCube.Commands
 
             var diststring = Journey.TotalDistance < 1000 ? $"{(int)Journey.TotalDistance}%e meters" : $"{(int)Journey.TotalDistanceKilometers}%ekm";
             p.Message($"%eThe Bus has travelled %d{diststring}%e!");
-            p.Message($"%eThere's %d{Journey.RemainingDistanceKilometers}%ekm until {Journey.Destination}!");
+            p.Message($"%eThere's %d{Journey.RemainingDistanceKilometers}%ekm until %6{Journey.DestinationName}%e!");
         }
     }
 }

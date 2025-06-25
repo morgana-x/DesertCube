@@ -7,7 +7,7 @@ namespace DesertCube
     {
         public override string name { get { return "DesertCube"; } }
         public override string MCGalaxy_Version { get { return "1.9.5.3"; } }
-        public override int build { get { return 2; } }
+        public override int build { get { return 3; } }
         public override string welcome { get { return "DesertCube loaded!"; } }
         public override string creator { get { return "morgana"; } }
         public override bool LoadAtStartup { get { return true; } }
@@ -31,6 +31,7 @@ namespace DesertCube
             new DesertCube.Commands.BusSpeed(),
             new DesertCube.Commands.BusDistance(),
 
+            new DesertCube.Commands.BusStopSkip(),
             new DesertCube.Commands.BusStopLoad(),
             new DesertCube.Commands.BusStopSave(),
             new DesertCube.Commands.BusNextStop(),

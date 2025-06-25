@@ -20,7 +20,7 @@ namespace DesertCube.Modules.Server
 
         static void OnHeartbeat(Heartbeat service, ref string name)
         {
-            name += DesertCubePlugin.Config.ServerNameSuffix.Replace("%d", Journey.RemainingDistanceKilometers.ToString()).Replace("%p", Journey.Destination);
+            name += DesertCubePlugin.Config.ServerNameSuffix.Replace("%d", Journey.RemainingDistanceKilometers.ToString()).Replace("%p", Journey.DestinationName);
         }
     }
 }
