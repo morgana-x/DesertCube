@@ -82,6 +82,8 @@ namespace DesertCube.DesertBus
         {
             tickTask = task;
 
+            if (BusSpeed == 0) return;
+
             Journey.AddDistance(BusSpeed / 2f);
 
             if (DateTime.Now > nextDecel)
