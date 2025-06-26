@@ -16,14 +16,17 @@ namespace DesertCube.Commands
 
         public override void Use(Player p, string message)
         {
+            if (DesertCubePlugin.Bus.Level == null) return;
             if (!Modules.Desert.Stop.AtStop)
             {
                 p.Message("Can't skip a non existant stop!");
                 return;
             }
+         //   Modules.Desert.Stop.ClearBusStop(DesertCubePlugin.Bus.Level);
             DesertCubePlugin.Bus.stopUntil = System.DateTime.Now;
-            Modules.Desert.Stop.AtStop = false;
+           // Modules.Desert.Stop.AtStop = false;
             p.Message($"Skipped the stop!");
+            DesertCubePlugin.Bus.Broadcast("%cThe stop has been skipped! The road's waiting!");
         }
     }
 }
