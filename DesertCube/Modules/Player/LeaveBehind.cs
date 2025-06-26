@@ -1,5 +1,4 @@
-﻿using MCGalaxy;
-using MCGalaxy.Tasks;
+﻿using MCGalaxy.Tasks;
 using System;
 
 namespace DesertCube.Modules.Player
@@ -8,17 +7,17 @@ namespace DesertCube.Modules.Player
     {
         public static void Load()
         {
-            sitTask = MCGalaxy.Server.MainScheduler.QueueRepeat(TickPlayerSit, null, TimeSpan.FromSeconds(0.25f));
+            leaveBehindTask = MCGalaxy.Server.MainScheduler.QueueRepeat(TickPlayerLeavebehind, null, TimeSpan.FromSeconds(0.25f));
         }
         public static void Unload()
         {
-            MCGalaxy.Server.MainScheduler.Cancel(sitTask);
+            MCGalaxy.Server.MainScheduler.Cancel(leaveBehindTask);
         }
 
-        static SchedulerTask sitTask;
-        private static void TickPlayerSit(SchedulerTask task)
+        static SchedulerTask leaveBehindTask;
+        private static void TickPlayerLeavebehind(SchedulerTask task)
         {
-            sitTask = task;
+            leaveBehindTask = task;
             if (DesertCubePlugin.Bus.Level == null) return;
             if (DesertCubePlugin.Bus.BusSpeed == 0) return;
             foreach (var player in DesertCubePlugin.Bus.GetPlayers())

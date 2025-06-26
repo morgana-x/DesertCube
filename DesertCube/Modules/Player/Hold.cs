@@ -8,32 +8,43 @@ namespace DesertCube.Modules.Player
     {
         public static void Load()
         {
-            sitTask = MCGalaxy.Server.MainScheduler.QueueRepeat(TickPlayerSit, null, TimeSpan.FromSeconds(0.5f));
+            holdTask = MCGalaxy.Server.MainScheduler.QueueRepeat(TickPlayerHold, null, TimeSpan.FromSeconds(0.45f));
         }
         public static void Unload()
         {
-            MCGalaxy.Server.MainScheduler.Cancel(sitTask);
+            MCGalaxy.Server.MainScheduler.Cancel(holdTask);
         }
 
-        static SchedulerTask sitTask;
+        static SchedulerTask holdTask;
 
-        private static void TickPlayerSit(SchedulerTask task)
+        static string GetModel(int holding)
         {
-            sitTask = task;
+            bool has = true;
+
+            if (holding == 0 || !has)
+                return "humanoid";
+
+            if (holding >= 66) holding = (holding - 256);
+
+            return $"hold|1.{holding.ToString("D3")}";
+        }
+        private static void TickPlayerHold(SchedulerTask task)
+        {
+            holdTask = task;
 
             foreach (var player in PlayerInfo.Online.Items)
             {
-                int holding = player.Model == "sit" ? 0 : player.GetHeldBlock();
-                if (player.Extras.GetInt("HeldBlock") == holding)  continue;
+                if (player.Model == "sit")
+                    continue;
+
+                int holding = player.GetHeldBlock();
+
+                if (player.Extras.GetInt("HeldBlock") == holding)
+                    continue;
                 player.Extras["HeldBlock"] = holding;
 
-                bool has = true;// (!Inventory.GetInventory(player.name).ContainsKey((ushort)holding));
-
-                if (holding >= 66) holding = (holding - 256);
-                string model = (holding == 0 || !has)? "humanoid" : $"hold|1.{holding.ToString("D3")}";
-
+                string model = GetModel(holding);
                 if (player.Model == model) continue;
-
                 player.UpdateModel(model);
             }
         }

@@ -32,11 +32,17 @@ namespace DesertCube.Modules.Player
 
             foreach (var player in PlayerInfo.Online.Items)
             {
-                string model = IsSeated(player) ? "sit" : "humanoid";
+                bool seated = IsSeated(player);
+
+                string model = seated ? "sit" : "humanoid";
 
                 if (player.Model == model) continue;
                 if (model == "humanoid" && player.Model.StartsWith("hold")) continue;
+
                 player.UpdateModel(model);
+
+                if (seated)
+                    player.Extras["HeldBlock"] = 0;
             }
         }
     }
