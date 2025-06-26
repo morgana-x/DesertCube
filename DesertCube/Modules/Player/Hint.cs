@@ -1,5 +1,4 @@
-﻿using MCGalaxy.Events.PlayerEvents;
-using MCGalaxy.Tasks;
+﻿using MCGalaxy.Tasks;
 using System;
 using System.Collections.Generic;
 
@@ -11,22 +10,27 @@ namespace DesertCube.Modules.Player
         { 
             "%eDo %d/leaderboard %eto get the hottest stats!",
             "%eDo %d/distance %eto check the total distance",
+            "%eCheck your points with %d/points",
+            "%eDo %d/nextstop%e to check how far the next stop is!",
+            "%eWant to hear snack sounds? Use%f https://github.com/morgana-x/ClassiCube/releases/tag/AudioCPE-v1.0.0 %e!",
+            "%eSource code can be found at %f https://github.com/morgana-x/DesertCube",
+            "%eDo %d/speed to get the bus speed!",
         };
 
         public static int index = 0;
         public static void Load()
         {
-            sitTask = MCGalaxy.Server.MainScheduler.QueueRepeat(TickPlayerSit, null, TimeSpan.FromMinutes(120));
+            hintTask = MCGalaxy.Server.MainScheduler.QueueRepeat(TickPlayerSit, null, TimeSpan.FromMinutes(60));
         }
         public static void Unload()
         {
-            MCGalaxy.Server.MainScheduler.Cancel(sitTask);
+            MCGalaxy.Server.MainScheduler.Cancel(hintTask);
         }
 
-        static SchedulerTask sitTask;
+        static SchedulerTask hintTask;
         private static void TickPlayerSit(SchedulerTask task)
         {
-            sitTask = task;
+            hintTask = task;
             foreach(var p in DesertCubePlugin.Bus.GetPlayers())
             {
                 p.Message(Hints[index]);
