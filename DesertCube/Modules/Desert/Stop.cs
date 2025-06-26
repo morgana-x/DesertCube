@@ -46,6 +46,12 @@ namespace DesertCube.Modules.Desert
             DesertCubePlugin.Bus.Broadcast($"%eThat's enough of this %cboring %eplace! %cBack on the road!");
         }
 
+        public static void ChooseNextStop()
+        {
+            nextStopMeters = (int)Journey.TotalDistance + rnd.Next(10000, 50000);
+            nextStop = RandomStop();
+        }
+
         public static void ArriveBusStop()
         {
             if (Journey.TotalDistance < nextStopMeters) return;
@@ -54,8 +60,7 @@ namespace DesertCube.Modules.Desert
                 LoadBusStop(DesertCubePlugin.Bus.Level, nextStop);
 
 
-            nextStopMeters = (int)Journey.TotalDistance + rnd.Next(10000, 50000);
-            nextStop = RandomStop();
+            ChooseNextStop();
 
             if (!loaded) return;
 

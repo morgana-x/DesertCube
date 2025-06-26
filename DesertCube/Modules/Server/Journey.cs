@@ -1,4 +1,5 @@
-﻿using MCGalaxy.SQL;
+﻿using DesertCube.Modules.Desert;
+using MCGalaxy.SQL;
 using MCGalaxy.Tasks;
 using System;
 using System.Collections.Generic;
@@ -80,24 +81,24 @@ namespace DesertCube.Modules.Server
                 return;
             }
 
-            if (RemainingDistance <= 0)
+            if (RemainingDistance > 0) return;
+
+            TotalDistance = 0;
+            Modules.Desert.Stop.ChooseNextStop();
+
+            foreach (var player in DesertCubePlugin.Bus.GetPlayers())
+                DesertCube.Modules.Player.Stats.AddPoints(player.name, 1); // wow!!
+
+            DesertCubePlugin.Bus.Broadcast($"%eWow you %cno lifers %edid it! %d{DestinationName}%e!");
+            DesertCubePlugin.Bus.Broadcast("%eFor your troubles you get %a1%e whole point!");
+
+            Destination = (Destination == DestinationType.Forward) ? DestinationType.Backward : DestinationType.Forward;
+
+            MCGalaxy.Server.MainScheduler.QueueOnce((SchedulerTask task) =>
             {
-                TotalDistance = 0;
-
-                foreach (var player in DesertCubePlugin.Bus.GetPlayers())
-                    DesertCube.Modules.Player.Stats.AddPoints(player.name, 1); // wow!!
-
-                DesertCubePlugin.Bus.Broadcast($"%eWow you %cno lifers %edid it! %d{DestinationName}%e!");
-                DesertCubePlugin.Bus.Broadcast("%eFor your troubles you get %a1%e whole point!");
-
-                Destination = (Destination == DestinationType.Forward) ? DestinationType.Backward : DestinationType.Forward;
-
-                MCGalaxy.Server.MainScheduler.QueueOnce((SchedulerTask task) =>
-                {
-                   DesertCubePlugin.Bus.Broadcast($"%eLet's head back towards %d{DestinationName}%e!");
-                }, null, TimeSpan.FromSeconds(1));
-                return;
-            }
+                DesertCubePlugin.Bus.Broadcast($"%eLet's head back towards %d{DestinationName}%e!");
+            }, null, TimeSpan.FromSeconds(1));
+           
         }
     }
 }
