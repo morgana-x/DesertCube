@@ -47,6 +47,7 @@ namespace DesertCube.Modules.Player
                 [76] = 1,
                 [77] = 1,
                 [78] = 1,
+                [79] = 1,
             };
             if (Cache.ContainsKey(player)) return Cache[player];
 

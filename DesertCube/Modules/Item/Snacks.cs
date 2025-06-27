@@ -18,14 +18,17 @@ namespace DesertCube.Modules.Item
             AddSnack(68, "Bread", 91, 18, DefaultSound);
             AddSnack(69, "Chips", 92, 16, ChipSound);
             AddSnack(70, "Pizza", 93, 10, PizzaSound);
-            AddSnack(71, "Chocolate", 94, 17, ChocolateSound);
-            AddSnack(72, "Hamburger", 95, 10, DefaultSound);
-            AddSnack(73, "Orange juice", 109, 11);
-            AddSnack(74, "Beer", 110, 12);
-            AddSnack(75, "Water", 111, 13);
-            AddSnack(76, "Coin", 108, 14, CoinSound);
-            AddSnack(77, "$10 Note", 107, 15, DefaultSound);
-            AddSnack(78, "Pasta", 106, 10, DefaultSound); // for the italians :D
+            AddSnack(71, "Pasta", 106, 10, DefaultSound); // for the italians :D
+            AddSnack(72, "Chocolate", 94, 17, ChocolateSound);
+            AddSnack(73, "Hamburger", 95, 10, DefaultSound);
+            AddSnack(74, "Orange juice", 109, 11);
+            AddSnack(75, "Beer", 110, 12);
+            AddSnack(76, "Water", 111, 13);
+            //AddSnack(77, "Black Coffee", 126, 19);
+            AddSnack(77, "Coffee", 127, 20);
+            AddSnack(78, "Coin", 108, 14, CoinSound);
+            AddSnack(79, "$10 Note", 107, 15, DefaultSound);
+
 
             Modules.Player.Effect.AddEffect(10, 200, 141, 77, 2); // Food
             Modules.Player.Effect.AddEffect(11, 249, 129, 0, 3); // OJ
@@ -36,6 +39,8 @@ namespace DesertCube.Modules.Item
             Modules.Player.Effect.AddEffect(16, 255, 248, 117, 1); // Chips
             Modules.Player.Effect.AddEffect(17, 135, 71, 22, 1); // Chocolate
             Modules.Player.Effect.AddEffect(18, 125, 82, 10, 1); // Bread
+            Modules.Player.Effect.AddEffect(19, 87, 48, 11, 3); // Dark Coffee
+            Modules.Player.Effect.AddEffect(20, 105, 59, 17, 3); // Coffee
 
             MCGalaxy.Events.PlayerEvents.OnPlayerClickEvent.Register(OnPlayerClick, Priority.Normal);
         }
