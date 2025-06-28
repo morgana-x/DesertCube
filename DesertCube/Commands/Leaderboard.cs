@@ -18,7 +18,8 @@ namespace DesertCube.Commands
         public override void Use(Player p, string message)
         {
             int page = 0;
-            int maxpages = Modules.Player.Stats.GetMaxPages();
+            int pagesize = 5;
+            int maxpages = Modules.Player.Stats.GetMaxPages(pagesize);
 
             if (message.Length > 0)
             {
@@ -41,17 +42,18 @@ namespace DesertCube.Commands
                 }
             }
 
-            var leaderboard = Modules.Player.Stats.GetPointLeaderboard(page);
+            var leaderboard = Modules.Player.Stats.GetPointLeaderboard(page, pagesize);
 
             p.Message("%e=======================");
-            p.Message("%eDesert Bus Leaderboard:");
+            p.Message("%eDesert Bus Leaderboard");
             p.Message("%e=======================");
             if (leaderboard.Key.Length == 0)
                 p.Message("%eNoone has any points yet!");
             for (int i = 0; i < leaderboard.Key.Length; i++)
-                p.Message($"%e{i+1}. %7{leaderboard.Key.ElementAt(i)} %d{leaderboard.Value.ElementAt(i)}");
+                p.Message($"%e{(page*pagesize)+i+1}. %7{leaderboard.Key.ElementAt(i)} %d{leaderboard.Value.ElementAt(i)}");
             p.Message("%e=======================");
             p.Message($"%eShowing page %d{page+1}%e/%d{maxpages+1}.");
+            p.Message("%e=======================");
         }
     }
 }
