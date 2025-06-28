@@ -21,12 +21,16 @@ namespace DesertCube.Modules.Player
 
         }
 
-        public static KeyValuePair<string[], int[]> GetPointLeaderboard(int maxentries=10)
+        public static int GetMaxPages(int pagesize=10)
+        {
+            return (Database.CountRows(TableName)/pagesize);
+        }
+        public static KeyValuePair<string[], int[]> GetPointLeaderboard(int page=0, int pagesize = 10)
         {
             List<string> PlayerNames = new List<string>();
             List<int> PlayerScores = new List<int>();
 
-            List<string[]> pRows = Database.GetRows(TableName, "name, points", $"LIMIT {maxentries}", "ORDER BY POINTS", "DESC");
+            List<string[]> pRows = Database.GetRows(TableName, "name, points", $"ORDER BY points DESC LIMIT {pagesize} OFFSET {page*pagesize}");
             foreach (var row in pRows)
             {
                 PlayerScores.Add(int.Parse(row[1]));
