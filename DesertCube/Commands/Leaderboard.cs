@@ -52,7 +52,7 @@ namespace DesertCube.Commands
             for (int i = 0; i < leaderboard.Key.Length; i++)
                 p.Message($"%e{(page*pagesize)+i+1}. %7{leaderboard.Key.ElementAt(i)} %d{leaderboard.Value.ElementAt(i)}");
             p.Message("%e=======================");
-            p.Message($"%eShowing page %d{page+1}%e/%d{maxpages+1}.");
+            p.Message($"%eShowing page %d{page+1}%e/%d{maxpages+1}%e.");
             p.Message("%e=======================");
         }
     }
