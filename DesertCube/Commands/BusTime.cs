@@ -1,4 +1,5 @@
 ﻿using MCGalaxy;
+using MCGalaxy.Commands;
 
 namespace DesertCube.Commands
 {
@@ -9,6 +10,8 @@ namespace DesertCube.Commands
         public override string type => "fun";
 
         public override LevelPermission defaultRank => LevelPermission.Guest;
+
+        public override CommandAlias[] Aliases => new CommandAlias[] { new CommandAlias("clock"), new CommandAlias("gettime") };
         public override void Help(Player p)
         {
             p.Message("/bustime");
