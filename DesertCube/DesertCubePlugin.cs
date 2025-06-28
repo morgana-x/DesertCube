@@ -23,20 +23,22 @@ namespace DesertCube
 
         public List<Command> Commands = new List<Command>()
         {
-            new DesertCube.Commands.Points(),
-            new DesertCube.Commands.PointsSet(),
-            new DesertCube.Commands.Leaderboard(),
+            new Commands.Points(),
+            new Commands.PointsSet(),
+            new Commands.Leaderboard(),
 
-            new DesertCube.Commands.BusLevel(),
-            new DesertCube.Commands.BusSpeed(),
-            new DesertCube.Commands.BusDistance(),
+            new Commands.BusLevel(),
+            new Commands.BusSpeed(),
+            new Commands.BusDistance(),
+            new Commands.BusTime(),
+            new Commands.BusSetTime(),
 
-            new DesertCube.Commands.BusStopSkip(),
-            new DesertCube.Commands.BusStopLoad(),
-            new DesertCube.Commands.BusStopSave(),
-            new DesertCube.Commands.BusNextStop(),
+            new Commands.BusStopSkip(),
+            new Commands.BusStopLoad(),
+            new Commands.BusStopSave(),
+            new Commands.BusNextStop(),
 
-            new DesertCube.Commands.ConfigReload()
+            new Commands.ConfigReload()
         };
         public override void Load(bool startup)
         {
@@ -49,7 +51,9 @@ namespace DesertCube
             Modules.Server.Journey.Load();
             Modules.Server.Name.Load();
 
+            Modules.Desert.DayNight.Load();
             Modules.Desert.Stop.Load();
+            Modules.Desert.Time.Load();
 
             Modules.Item.Snacks.Load();
 
@@ -78,7 +82,9 @@ namespace DesertCube
             Modules.Server.Journey.Unload();
             Modules.Server.Name.Unload();
 
+            Modules.Desert.DayNight.Unload();
             Modules.Desert.Stop.Unload();
+            Modules.Desert.Time.Unload();
 
             Modules.Item.Snacks.Unload();
 

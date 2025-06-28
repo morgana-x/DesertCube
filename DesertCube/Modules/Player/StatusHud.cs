@@ -9,19 +9,23 @@ namespace DesertCube.Modules.Player
     {
         public static void Load()
         {
-            sitTask = MCGalaxy.Server.MainScheduler.QueueRepeat(TickPlayerSit, null, TimeSpan.FromSeconds(1));
+            statusHudTask = MCGalaxy.Server.MainScheduler.QueueRepeat(TickPlayerSit, null, TimeSpan.FromSeconds(1));
             BroadcastStatus();
         }
         public static void Unload()
         {
-            MCGalaxy.Server.MainScheduler.Cancel(sitTask);
+            MCGalaxy.Server.MainScheduler.Cancel(statusHudTask);
         }
 
-        static SchedulerTask sitTask;
+        static SchedulerTask statusHudTask;
 
         static string GetStatus1Message()
         {
             return $"%3{(DesertCubePlugin.Bus.BusSpeed * 3.6f).ToString("0")}%7km/h %3{Journey.RemainingDistanceKilometers}%7km";
+        }
+        static string GetStatus2Message()
+        {
+            return $"&3{Desert.Time.TimeHour.ToString("D2")}&7:&3{Desert.Time.TimeMinute.ToString("D2")}";
         }
 
         static bool ShouldSeeMessage(MCGalaxy.Player player)
@@ -32,13 +36,21 @@ namespace DesertCube.Modules.Player
         }
         static void EraseStatus(MCGalaxy.Player player)
         {
-            if (player.Extras.GetString("Status1") == "") return;
-            player.SendCpeMessage(CpeMessageType.Status1, "");
-            player.Extras["Status1"] = "";
+            UpdateStatus(player, CpeMessageType.Status1, "");
+            UpdateStatus(player, CpeMessageType.Status2, "");
+        }
+
+        static void UpdateStatus(MCGalaxy.Player player, CpeMessageType type, string message)
+        {
+            var enumName = Enum.GetName(typeof(CpeMessageType), type);
+            if (player.Extras.GetString(enumName) == message) return;
+            player.SendCpeMessage(type, message);
+            player.Extras[enumName] = message;
         }
         static void BroadcastStatus()
         {
             string message = GetStatus1Message();
+            string message2 = GetStatus2Message();
             foreach (var player in DesertCubePlugin.Bus.GetPlayers())
             {
                 if (!player.Session.hasCpe) continue;
@@ -48,15 +60,13 @@ namespace DesertCube.Modules.Player
                     EraseStatus(player);
                     continue; 
                 }
-
-                if (player.Extras.GetString("Status1") == message) continue;
-                player.SendCpeMessage(CpeMessageType.Status1, message);
-                player.Extras["Status1"] = message;
+                UpdateStatus(player, CpeMessageType.Status1, message);
+                UpdateStatus(player, CpeMessageType.Status2, message2);
             }
         }
         private static void TickPlayerSit(SchedulerTask task)
         {
-            sitTask = task;
+            statusHudTask = task;
             BroadcastStatus();
         }
     }
