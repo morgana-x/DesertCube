@@ -5,7 +5,7 @@ namespace DesertCube.Modules.Desert
 {
     public class Time
     {
-        public static int CurrentTime = 0;
+        public static int CurrentTime = 5000;
 
         public static int MaxTime = 12000;
 
