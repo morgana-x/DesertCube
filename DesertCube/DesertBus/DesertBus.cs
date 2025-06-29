@@ -61,16 +61,14 @@ namespace DesertCube.DesertBus
         }
         void OnPlayerClick(Player p, MouseButton btn, MouseAction action, ushort yaw, ushort pitch, byte entityID, ushort x, ushort y, ushort z, TargetBlockFace face)
         {
-            OnPlayerInteract(p, x, y, z);
+            if (Level == p.level)
+                OnPlayerInteract(p, x, y, z);
         }
        
         void OnPlayerChangingBlock(Player p, ushort x, ushort y, ushort z, ushort block, bool placing, ref bool cancel)
         {
-            if (Level != p.level) return;
-
-            if (!p.Session.hasCpe)
+            if (Level == p.level && !p.Session.hasCpe)
                 OnPlayerInteract(p, x, y, z); // Support for Classic 0.30 Clients
-
         }
         void OnPlayerSentMap(Player p, Level prevLevl, Level level)
         {
