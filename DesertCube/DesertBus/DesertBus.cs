@@ -42,6 +42,7 @@ namespace DesertCube.DesertBus
             tickTask = MCGalaxy.Server.MainScheduler.QueueRepeat(Tick, null, TimeSpan.FromMilliseconds(500));
 
             OnPlayerClickEvent.Register(OnPlayerClick, Priority.Normal);
+            OnBlockChangingEvent.Register(OnPlayerChangingBlock, Priority.Normal);
             OnSentMapEvent.Register(OnPlayerSentMap, Priority.Normal);
             SetSpeed(0);
         }
@@ -49,13 +50,27 @@ namespace DesertCube.DesertBus
         {
             MCGalaxy.Server.MainScheduler.Cancel(tickTask);
             OnPlayerClickEvent.Unregister(OnPlayerClick);
+            OnBlockChangingEvent.Unregister(OnPlayerChangingBlock);
             OnSentMapEvent.Unregister(OnPlayerSentMap);
         }
 
-        void OnPlayerClick(Player p, MouseButton btn, MouseAction action, ushort yaw, ushort pitch, byte entityID, ushort x, ushort y, ushort z, TargetBlockFace face)
+        void OnPlayerInteract(Player p, ushort x, ushort y, ushort z)
         {
             if (x == ButtonPosition.X && y == ButtonPosition.Y && z == ButtonPosition.Z)
                 Accelerate(DesertCubePlugin.Config.BusAcceleration);
+        }
+        void OnPlayerClick(Player p, MouseButton btn, MouseAction action, ushort yaw, ushort pitch, byte entityID, ushort x, ushort y, ushort z, TargetBlockFace face)
+        {
+            OnPlayerInteract(p, x, y, z);
+        }
+       
+        void OnPlayerChangingBlock(Player p, ushort x, ushort y, ushort z, ushort block, bool placing, ref bool cancel)
+        {
+            if (Level != p.level) return;
+
+            if (!p.Session.hasCpe)
+                OnPlayerInteract(p, x, y, z); // Support for Classic 0.30 Clients
+
         }
         void OnPlayerSentMap(Player p, Level prevLevl, Level level)
         {
