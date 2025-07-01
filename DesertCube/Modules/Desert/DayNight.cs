@@ -106,6 +106,6 @@ namespace DesertCube.Modules.Desert
 
         // This is dodgy I know... but it's 2am!
         public static bool OverrideFog = false;
-        public static short[] OverrideFogColour = new short[] { ToI16Col(0xe8), ToI16Col(0xdb), ToI16Col(0x90) };
+        public static short[] OverrideFogColour = new short[] { ToI16Col(0xc9), ToI16Col(0xb8), ToI16Col(0x55) };
     }
 }
