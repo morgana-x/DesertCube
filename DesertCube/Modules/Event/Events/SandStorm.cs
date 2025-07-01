@@ -41,7 +41,7 @@ namespace DesertCube.Modules.Event.Events
                     DesertCubePlugin.Bus.Broadcast("%cThe driver is getting a pay reduction grrr");
 
                     DesertCubePlugin.Bus.SetSpeed(0);
-                    Stop.ArriveBusStop(Stop.RandomStop(), 300, true);
+                    Stop.ArriveBusStop(Stop.RandomStop(), 120, true);
                 }
                 Thread.Sleep(1000);
             }
