@@ -1,7 +1,8 @@
-﻿using MCGalaxy.Tasks;
+﻿using DesertCube.Modules.Desert;
+using MCGalaxy.Tasks;
 using System;
 
-namespace DesertCube.Modules.Desert
+namespace DesertCube.Modules.Server
 {
     public class Time
     {
@@ -10,7 +11,7 @@ namespace DesertCube.Modules.Desert
         public static int MaxTime = 12000;
 
         public static string FormattedTime => $"{TimeHour.ToString("D2")}:{TimeMinute.ToString("D2")}";
-        public static int TimeSeconds { get { return (int)((CurrentTime / (float)MaxTime) * 86400f); } }
+        public static int TimeSeconds { get { return (int)(CurrentTime / (float)MaxTime * 86400f); } }
         public static int TimeMinute { get { int minutes = TimeSeconds / 60; if (minutes >= 60) { minutes = minutes % 60; } return minutes; } }
         public static int TimeHour { get { return TimeSeconds / 60 / 60; } }
 
@@ -34,7 +35,7 @@ namespace DesertCube.Modules.Desert
         }
         public static int RealSecondsToBusSeconds(int seconds)
         {
-            return (int)Math.Round(((float)seconds / 86400f) * MaxTime);
+            return (int)Math.Round(seconds / 86400f * MaxTime);
         }
 
         public static int RealTimeToBusSeconds(int hour, int minute)

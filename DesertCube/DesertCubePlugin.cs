@@ -39,6 +39,8 @@ namespace DesertCube
             new Commands.BusStopSave(),
             new Commands.BusNextStop(),
 
+            new Commands.BusEvent(),
+
             new Commands.ConfigReload()
         };
         public override void Load(bool startup)
@@ -49,12 +51,14 @@ namespace DesertCube
 
             Modules.Chat.Cef.Load();
 
+            Modules.Server.Hint.Load();
             Modules.Server.Journey.Load();
             Modules.Server.Name.Load();
+            Modules.Server.Time.Load();
 
             Modules.Desert.DayNight.Load();
             Modules.Desert.Stop.Load();
-            Modules.Desert.Time.Load();
+            Modules.Desert.Weather.Load();
 
             Modules.Event.Event.Load();
 
@@ -62,7 +66,7 @@ namespace DesertCube
 
             Modules.Player.AntiGrief.Load();
             Modules.Player.Effect.Load();
-            Modules.Player.Hint.Load();
+
             Modules.Player.Hold.Load();
             Modules.Player.Inventory.Load();
             Modules.Player.LeaveBehind.Load();
@@ -82,12 +86,14 @@ namespace DesertCube
 
             Modules.Chat.Cef.Unload();
 
+            Modules.Server.Hint.Unload();
             Modules.Server.Journey.Unload();
             Modules.Server.Name.Unload();
+            Modules.Server.Time.Unload();
 
             Modules.Desert.DayNight.Unload();
             Modules.Desert.Stop.Unload();
-            Modules.Desert.Time.Unload();
+            Modules.Desert.Weather.Unload();
 
             Modules.Event.Event.Unload();
 
@@ -95,7 +101,6 @@ namespace DesertCube
 
             Modules.Player.AntiGrief.Unload();
             Modules.Player.Effect.Unload();
-            Modules.Player.Hint.Unload();
             Modules.Player.Hold.Unload();
             Modules.Player.Inventory.Unload();
             Modules.Player.LeaveBehind.Unload();

@@ -1,4 +1,5 @@
-﻿using MCGalaxy;
+﻿using DesertCube.Modules.Server;
+using MCGalaxy;
 using MCGalaxy.Commands;
 
 namespace DesertCube.Commands
@@ -19,7 +20,7 @@ namespace DesertCube.Commands
 
         public override void Use(Player p, string message)
         {
-            p.Message($"%eThe Bus's clock reads: %d{Modules.Desert.Time.FormattedTime}");
+            p.Message($"%eThe Bus's clock reads: %d{Time.FormattedTime}");
         }
     }
 }

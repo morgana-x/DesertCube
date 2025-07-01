@@ -52,19 +52,20 @@ namespace DesertCube.Modules.Desert
             nextStop = RandomStop();
         }
 
-        public static void ArriveBusStop()
+        public static void ArriveBusStop(string stop="", int minutes = -1, bool force=false)
         {
-            if (Journey.TotalDistance < nextStopMeters) return;
+            if (Journey.TotalDistance < nextStopMeters && !force) return;
 
-            if (nextStop != "")
-                LoadBusStop(DesertCubePlugin.Bus.Level, nextStop);
+            stop = (stop == "") ? nextStop : stop;
+            if (stop != "")
+                LoadBusStop(DesertCubePlugin.Bus.Level, stop);
 
 
             ChooseNextStop();
 
             if (!loaded) return;
 
-            int minutes = rnd.Next(30, 120);
+            minutes = minutes == -1 ? rnd.Next(30, 120) : minutes;
             DesertCubePlugin.Bus.stopUntil = DateTime.Now.AddSeconds(minutes);
             DesertCubePlugin.Bus.Broadcast($"%eWe've arrived at a %dstop%e! We'll be here for %d{minutes}%e seconds!");
             AtStop = true;

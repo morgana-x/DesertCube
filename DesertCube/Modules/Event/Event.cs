@@ -6,17 +6,24 @@ namespace DesertCube.Modules.Event
 {
     public class Event
     {
-        public List<EventBase> Events = new List<EventBase>()
+        public static List<EventBase> Events = new List<EventBase>()
         { 
-            new Events.BusBreakdown(),
+         //   new Events.BusBreakdown(),
             new Events.Sandstorm(),
         };
 
+        public static SchedulerTask ScheduleEventTask;
+
         public static SchedulerTask CurrentEventTask = null;
         public static EventBase CurrentEvent = null;
+
+        public static DateTime nextEvent = DateTime.Now;
+
+
+        static Scheduler eventScheduler = new Scheduler("desertbusevent");
         public static void Load()
         {
-
+            ScheduleEventTask = MCGalaxy.Server.MainScheduler.QueueRepeat(ChooseEventTask, null, TimeSpan.FromSeconds(60));
         }
 
         public static void Unload()
@@ -27,22 +34,60 @@ namespace DesertCube.Modules.Event
         public static void StartEvent(EventBase evnt)
         {
             StopEvent();
+            nextEvent = DateTime.Now.AddMinutes(rnd.Next(60, 120));
             CurrentEvent = evnt;
-            CurrentEventTask = MCGalaxy.Server.MainScheduler.QueueOnce(RunEvent, null, TimeSpan.Zero);
+            CurrentEventTask = eventScheduler.QueueOnce(RunEvent, null, TimeSpan.Zero);
+        }
+
+        public static void StartEvent(string eventname)
+        {
+            foreach(var evnt in Events)
+                if (evnt.Name == eventname)
+                {
+                    StartEvent(evnt);
+                    break;
+                }
         }
         public static void StopEvent()
         {
             if (CurrentEventTask != null)
-                MCGalaxy.Server.MainScheduler.Cancel(CurrentEventTask);
+                eventScheduler.Cancel(CurrentEventTask);
             CurrentEvent = null;
+        }
+
+        static System.Random rnd  = new System.Random();
+        static void ChooseEventTask(SchedulerTask task)
+        {
+            if (DateTime.Now < nextEvent) return;
+            if (CurrentEvent != null) return;
+            StartEvent(Events[rnd.Next(0, Events.Count)]);
         }
         static void RunEvent(SchedulerTask task)
         {
             CurrentEventTask = task;
             if (CurrentEvent == null) return;
-            CurrentEvent.Start();
-            CurrentEvent.Run();
-            CurrentEvent.End();
+
+            try
+            {
+                CurrentEvent.Start();
+                try
+                {
+                    CurrentEvent.Run();
+                }
+                catch (Exception ex)
+                {
+                    MCGalaxy.Player.Console.Message("Error running desert bus event!");
+                    MCGalaxy.Player.Console.Message(ex.ToString());
+                }
+                CurrentEvent.End();
+            }
+            catch(Exception ex)
+            {
+                MCGalaxy.Player.Console.Message("Error running desert bus event!");
+                MCGalaxy.Player.Console.Message(ex.ToString());
+            }
+
+            StopEvent();
         }
     }
 }

@@ -25,7 +25,7 @@ namespace DesertCube.Modules.Player
         }
         static string GetStatus2Message()
         {
-            return $"&3{Desert.Time.TimeHour.ToString("D2")}&7:&3{Desert.Time.TimeMinute.ToString("D2")}";
+            return $"&3{Time.TimeHour.ToString("D2")}&7:&3{Time.TimeMinute.ToString("D2")}";
         }
 
         static bool ShouldSeeMessage(MCGalaxy.Player player)

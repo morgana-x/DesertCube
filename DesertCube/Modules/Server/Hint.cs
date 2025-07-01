@@ -2,14 +2,15 @@
 using System;
 using System.Collections.Generic;
 
-namespace DesertCube.Modules.Player
+namespace DesertCube.Modules.Server
 {
     public class Hint
     {
         public static List<string> Hints = new List<string>()
-        { 
+        {
             "%eDo %d/leaderboard %eto get the hottest stats!",
-            "%Use %d/distance %eto check the total distance",
+            "%eUse %d/distance %eto check the total distance",
+            "%eUse %d/distboard %eto see the distance leaderboard!",
             "%eCheck your points with %d/points",
             "%eDo %d/nextstop%e to check how far the next stop is!",
             "%eWant to hear snack sounds? Use%f https://github.com/morgana-x/ClassiCube/releases/tag/AudioCPE-v1.0.0 %e!",
@@ -32,10 +33,10 @@ namespace DesertCube.Modules.Player
         private static void TickPlayerSit(SchedulerTask task)
         {
             hintTask = task;
-            foreach(var p in DesertCubePlugin.Bus.GetPlayers())
-            {
+
+            foreach (var p in DesertCubePlugin.Bus.GetPlayers())
                 p.Message(Hints[index]);
-            }
+
             index++;
             if (index >= Hints.Count) index = 0;
         }

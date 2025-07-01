@@ -1,4 +1,4 @@
-﻿using DesertCube.Modules.Desert;
+﻿using DesertCube.Modules.Server;
 using MCGalaxy;
 using System;
 

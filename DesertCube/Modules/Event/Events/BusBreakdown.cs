@@ -4,6 +4,7 @@ namespace DesertCube.Modules.Event.Events
 {
     internal class BusBreakdown : EventBase
     {
+        public override string Name => "breakdown";
         public override void Start()
         {
             DesertCubePlugin.Bus.Broadcast("%cThe bus has broken down!");

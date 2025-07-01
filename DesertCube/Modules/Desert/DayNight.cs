@@ -1,4 +1,5 @@
-﻿using MCGalaxy.Network;
+﻿using DesertCube.Modules.Server;
+using MCGalaxy.Network;
 using MCGalaxy.Tasks;
 using System;
 namespace DesertCube.Modules.Desert
@@ -11,7 +12,7 @@ namespace DesertCube.Modules.Desert
         public static int NightEnd = (int)(Time.MaxTime * 0.26f);
         public static int NightStart = (int)(Time.MaxTime * 0.78f);
 
-        static EnvConfigDayNight CurrentEnv => IsNight ? NightConfig : DayConfig;
+        public static EnvConfigDayNight CurrentEnv => IsNight ? NightConfig : DayConfig;
         static SchedulerTask dayNightTask;
 
         public static void Load()
@@ -57,7 +58,12 @@ namespace DesertCube.Modules.Desert
            
             p.Send(Packet.EnvColor((byte)EnvColour.SkyColour    , env.SkyColour[0] , (env.SkyColour[1])      , (env.SkyColour[2])));
             p.Send(Packet.EnvColor((byte)EnvColour.RoadColour   , env.RoadColour[0]     , (env.RoadColour[1])     , (env.RoadColour[2])));
-            p.Send(Packet.EnvColor((byte)EnvColour.FogColour    , env.FogColour[0]    , (env.FogColour[1])      , (env.FogColour[2])));
+
+            if (!OverrideFog) // Dodgy logic cause im tired
+                p.Send(Packet.EnvColor((byte)EnvColour.FogColour    , env.FogColour[0]    , (env.FogColour[1])      , (env.FogColour[2])));
+            else
+                p.Send(Packet.EnvColor((byte)EnvColour.FogColour, OverrideFogColour[0], (OverrideFogColour[1]), (OverrideFogColour[2])));
+
             p.Send(Packet.EnvColor((byte)EnvColour.ShadowColour , env.ShadowColour[0]  , (env.ShadowColour[1])   , (env.ShadowColour[2])));
             p.Send(Packet.EnvColor((byte)EnvColour.SkyboxColour , env.SkyboxColour[0]   , (env.SkyboxColour[1])   , (env.SkyboxColour[2])));
             p.Send(Packet.EnvColor((byte)EnvColour.LightColour, env.SunlightColour[0], (env.SunlightColour[1]), (env.SunlightColour[2])));
@@ -97,5 +103,9 @@ namespace DesertCube.Modules.Desert
             ShadowColour = new short[] { 45, 45, 45 },
             FogColour = new short[] { 0x0, 0x0, 0x0 }
         };
+
+        // This is dodgy I know... but it's 2am!
+        public static bool OverrideFog = false;
+        public static short[] OverrideFogColour = new short[] { ToI16Col(0xe8), ToI16Col(0xdb), ToI16Col(0x90) };
     }
 }
