@@ -24,6 +24,7 @@ namespace DesertCube.Modules.Event
         public static void Load()
         {
             ScheduleEventTask = MCGalaxy.Server.MainScheduler.QueueRepeat(ChooseEventTask, null, TimeSpan.FromSeconds(60));
+            nextEvent = DateTime.Now.AddMinutes(rnd.Next(60, 120)); // Ensure event is scheduled sometime later
         }
 
         public static void Unload()

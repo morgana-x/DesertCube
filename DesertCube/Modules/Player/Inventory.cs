@@ -23,6 +23,8 @@ namespace DesertCube.Modules.Player
             OnPlayerSpawningEvent.Register(EventPlayerSpawn, Priority.High);
             OnSentMapEvent.Register(EventSentMap, Priority.Normal);
 
+            foreach (var pl in MCGalaxy.PlayerInfo.Online.Items)
+                SendInventory(pl);
         }
         public static void Unload()
         {
