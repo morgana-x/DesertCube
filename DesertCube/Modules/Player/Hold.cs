@@ -19,13 +19,8 @@ namespace DesertCube.Modules.Player
 
         static string GetModel(int holding)
         {
-            bool has = true;
-
-            if (holding == 0 || !has)
+            if (holding == 0)
                 return "humanoid";
-
-            if (holding >= 66) holding = (holding - 256);
-
             return $"hold|1.{holding.ToString("D3")}";
         }
         private static void TickPlayerHold(SchedulerTask task)
@@ -42,6 +37,14 @@ namespace DesertCube.Modules.Player
                 if (player.Extras.GetInt("HeldBlock") == holding)
                     continue;
                 player.Extras["HeldBlock"] = holding;
+
+                if (holding >= 66) holding = (holding - 256);
+                if (!player.Game.Referee &&
+                    player.Level == DesertCubePlugin.Bus.Level &&
+                    !Inventory.GetInventory(player.name).ContainsKey((ushort)holding))
+                {
+                    holding = 0;
+                }
 
                 string model = GetModel(holding);
                 if (player.Model == model) continue;

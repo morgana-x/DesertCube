@@ -37,6 +37,7 @@ namespace DesertCube.Modules.Desert
         static void SendEnv(MCGalaxy.Player p)
         {
             if (p.level != DesertCubePlugin.Bus.Level) return;
+            if (!p.Session.Supports("EnvMapAspect", 2) && !p.Session.Supports("EnvMapAspect", 1)) return;
             p.Send(MCGalaxy.Network.Packet.EnvMapProperty(MCGalaxy.EnvProp.MaxFog, CurrentFog));
         }
 
