@@ -1,6 +1,4 @@
-﻿using DesertCube.Modules.Server;
-using MCGalaxy;
-using MCGalaxy.Commands;
+﻿using MCGalaxy;
 
 namespace DesertCube.Commands
 {
@@ -18,8 +16,16 @@ namespace DesertCube.Commands
             p.Message("/busevent eventname");
         }
 
+        // pure laziness here, I am tired!!! mostly for testing anyway
         public override void Use(Player p, string message)
         {
+            if (int.TryParse(message, out int seconds))
+            {
+                Modules.Event.Event.nextEvent = System.DateTime.Now.AddSeconds(seconds);
+                p.Message($"Making event start in {message} seconds");
+                return;
+            }
+
             Modules.Event.Event.StartEvent(message);
             p.Message($"Started event {message}");
         }
