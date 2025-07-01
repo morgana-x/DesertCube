@@ -26,6 +26,7 @@ namespace DesertCube
             new Commands.Points(),
             new Commands.PointsSet(),
             new Commands.Leaderboard(),
+            new Commands.LeaderboardDistance(),
 
             new Commands.BusLevel(),
             new Commands.BusSpeed(),
@@ -54,6 +55,8 @@ namespace DesertCube
             Modules.Desert.DayNight.Load();
             Modules.Desert.Stop.Load();
             Modules.Desert.Time.Load();
+
+            Modules.Event.Event.Load();
 
             Modules.Item.Snacks.Load();
 
@@ -85,6 +88,8 @@ namespace DesertCube
             Modules.Desert.DayNight.Unload();
             Modules.Desert.Stop.Unload();
             Modules.Desert.Time.Unload();
+
+            Modules.Event.Event.Unload();
 
             Modules.Item.Snacks.Unload();
 

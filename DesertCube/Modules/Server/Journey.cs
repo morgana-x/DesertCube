@@ -1,4 +1,5 @@
 ﻿using DesertCube.Modules.Desert;
+using DesertCube.Modules.Player;
 using MCGalaxy.SQL;
 using MCGalaxy.Tasks;
 using System;
@@ -71,8 +72,12 @@ namespace DesertCube.Modules.Server
 
         public static void AddDistance(float meters)
         {
+            if (meters == 0) return;
 
-            TotalDistance += meters; 
+            TotalDistance += meters;
+
+            foreach (var p in DesertCubePlugin.Bus.GetPlayers())
+                Stats.AddDistance(p.name, (int)meters);
 
             if (TotalDistance >= Modules.Desert.Stop.nextStopMeters)
             {
