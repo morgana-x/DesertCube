@@ -24,7 +24,7 @@ namespace DesertCube.Modules.Player
             OnSentMapEvent.Register(EventSentMap, Priority.Normal);
 
             foreach (var pl in MCGalaxy.PlayerInfo.Online.Items)
-                SendInventory(pl);
+                SendBlockOrder(pl);
         }
         public static void Unload()
         {
@@ -105,7 +105,27 @@ namespace DesertCube.Modules.Player
 
             Database.UpdateRows(TableName, "inventory=@0", "WHERE name=@1", inventorystr, player);
         }
+        public static void SendBlockOrder(MCGalaxy.Player player)
+        {
+            if (player.Level != DesertCubePlugin.Bus.Level) return;
+            if (!player.Session.hasCpe) return;
+            var inventory = GetInventory(player.name);
 
+            List<byte> bulk = new List<byte>();
+            ushort x = 1;
+            for (ushort i = 0; i < player.level.CustomBlockDefs.Length; i++)
+            {
+                if (i >= Block.MaxRaw) break;
+                var def = player.level.CustomBlockDefs[i];
+                if (i > Block.CPE_MAX_BLOCK && (def == null || def.RawID > Block.MaxRaw)) continue;
+
+                var block = Block.ToRaw(i);
+                bool has = player.Game.Referee || inventory.ContainsKey(block);
+                bulk.AddRange(Packet.SetInventoryOrder(block, has ? x : (ushort)0, player.Session.hasExtBlocks));
+                if (has) x++;
+            }
+            player.Send(bulk.ToArray());
+        }
         public static void SendInventory(MCGalaxy.Player player)
         {
             if (player.Level != DesertCubePlugin.Bus.Level) return;
@@ -114,29 +134,16 @@ namespace DesertCube.Modules.Player
             List<byte> bulk = new List<byte>();
 
             // Send Hotbar
-            bulk.Clear();
             for (int i = 0; i < 9; i++)
                 bulk.AddRange(Packet.SetHotbar(0, (byte)i, player.Session.hasExtBlocks));
             player.Send(bulk.ToArray());
 
-            var inventory = GetInventory(player.name);
+
 
             // Send Inventory Order
-            bulk.Clear();
+            SendBlockOrder(player);
 
-            ushort x = 1;
-            for (ushort i = 0; i < player.level.CustomBlockDefs.Length; i++)
-            {
-                if (i >= Block.MaxRaw) break;
-                var def = player.level.CustomBlockDefs[i];
-                if (i > Block.CPE_MAX_BLOCK && (  def == null || def.RawID > Block.MaxRaw)) continue;
 
-                var block = Block.ToRaw(i);
-                bool has = player.Game.Referee || inventory.ContainsKey(block);
-                bulk.AddRange(Packet.SetInventoryOrder(block, has ? x : (ushort)0, player.Session.hasExtBlocks));
-                if (has) x++;
-            }
-            player.Send(bulk.ToArray());
         }
         static void EventSentMap(MCGalaxy.Player plyaer, Level prev, Level cur)
         {
