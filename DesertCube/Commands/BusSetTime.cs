@@ -1,5 +1,6 @@
 ﻿using DesertCube.Modules.Server;
 using MCGalaxy;
+using MCGalaxy.Commands;
 using System;
 
 namespace DesertCube.Commands
@@ -11,6 +12,8 @@ namespace DesertCube.Commands
         public override string type => "fun";
 
         public override LevelPermission defaultRank => LevelPermission.Owner;
+
+        public override CommandAlias[] Aliases => new CommandAlias[] { new CommandAlias("settime") };
         public override void Help(Player p)
         {
             p.Message("/bussettime time");
