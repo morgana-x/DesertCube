@@ -9,9 +9,9 @@ namespace DesertCube.Commands
     {
         public override string name => "busdistance";
 
-        public override string type => "map";
+        public override string type => "Bus";
 
-        public override CommandAlias[] Aliases => new CommandAlias[] { new CommandAlias("distance") };
+        public override CommandAlias[] Aliases => new CommandAlias[] { new CommandAlias("distance"), new CommandAlias("dist") };
 
         public override LevelPermission defaultRank => LevelPermission.Guest;
         public override void Help(Player p)

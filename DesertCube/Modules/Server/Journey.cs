@@ -1,5 +1,6 @@
 ﻿using DesertCube.Modules.Desert;
 using DesertCube.Modules.Player;
+using MCGalaxy;
 using MCGalaxy.SQL;
 using MCGalaxy.Tasks;
 using System;
@@ -23,7 +24,11 @@ namespace DesertCube.Modules.Server
         };
 
         public static DestinationType Destination = DestinationType.Forward;
-        public static string DestinationName { get { return (Destination == DestinationType.Forward) ? DesertCubePlugin.Config.DestinationName : DesertCubePlugin.Config.OriginName;  } }
+        public static string DestinationName { get {
+                string name = (Destination == DestinationType.Forward) ? DesertCubePlugin.Config.DestinationName : DesertCubePlugin.Config.OriginName;
+                return Christmas.IsChristmasMonth() ? name.Replace("Vegas", "The North Pole").Replace("Tucson, Arizona", "The South Pole") : name; 
+            } 
+        }
 
         public volatile static float TotalDistance = 0f;
         public static float TotalDistanceKilometers { get { return (float)Math.Ceiling(TotalDistance / 1000f); } } 
@@ -36,7 +41,14 @@ namespace DesertCube.Modules.Server
         static SchedulerTask autosavetask;
         public static void Load()
         {
-            Database.CreateTable(TableName, DesertBusJourneyTable);
+            try
+            {
+                Database.CreateTable(TableName, DesertBusJourneyTable);
+            }
+            catch(Exception e)
+            {
+                Logger.Log(LogType.ConsoleMessage, "Journey table already created");
+            }
 
             List<string[]> pRows = Database.GetRows(TableName, "*", "WHERE id=0");
             if (pRows.Count > 0)

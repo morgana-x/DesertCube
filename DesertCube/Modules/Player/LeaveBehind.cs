@@ -22,7 +22,7 @@ namespace DesertCube.Modules.Player
             if (DesertCubePlugin.Bus.BusSpeed == 0) return;
             foreach (var player in DesertCubePlugin.Bus.GetPlayers())
             {
-                if (player.Level != DesertCubePlugin.Bus.Level) continue;
+                if (player.Level.name != DesertCubePlugin.Config.BusLevel) continue;
                 if (player.Game.Referee) continue;
                 if (DesertCubePlugin.Bus.InsideBus(player)) continue;
                 player.SendPosition(DesertCubePlugin.Bus.Level.SpawnPos, player.Rot);

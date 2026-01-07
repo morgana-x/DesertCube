@@ -6,7 +6,7 @@ namespace DesertCube.Commands
     {
         public override string name => "points";
 
-        public override string type => "fun";
+        public override string type => "Bus";
 
         public override LevelPermission defaultRank => LevelPermission.Guest;
         public override void Help(Player p)

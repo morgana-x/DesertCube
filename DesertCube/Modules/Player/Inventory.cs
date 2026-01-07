@@ -1,4 +1,5 @@
 ﻿using MCGalaxy;
+using MCGalaxy.DB;
 using MCGalaxy.Events.PlayerEvents;
 using MCGalaxy.Network;
 using MCGalaxy.SQL;
@@ -50,6 +51,7 @@ namespace DesertCube.Modules.Player
                 [77] = 1,
                 [78] = 1,
                 [79] = 1,
+              //  [100] = 1
             };
             if (Cache.ContainsKey(player)) return Cache[player];
 
@@ -107,28 +109,27 @@ namespace DesertCube.Modules.Player
         }
         public static void SendBlockOrder(MCGalaxy.Player player)
         {
-            if (player.Level != DesertCubePlugin.Bus.Level) return;
+            if (player.Level.name != DesertCubePlugin.Config.BusLevel) return;
             if (!player.Session.hasCpe) return;
+    
             var inventory = GetInventory(player.name);
 
             List<byte> bulk = new List<byte>();
             ushort x = 1;
-            for (ushort i = 0; i < player.level.CustomBlockDefs.Length; i++)
-            {
-                if (i >= Block.MaxRaw) break;
-                var def = player.level.CustomBlockDefs[i];
-                if (i > Block.CPE_MAX_BLOCK && (def == null || def.RawID > Block.MaxRaw)) continue;
+            for (ushort i = 0; i < 767; i++)
+                 bulk.AddRange(Packet.SetInventoryOrder(Block.Air, i, player.Session.hasExtBlocks));
 
-                var block = Block.ToRaw(i);
-                bool has = player.Game.Referee || inventory.ContainsKey(block);
-                bulk.AddRange(Packet.SetInventoryOrder(block, has ? x : (ushort)0, player.Session.hasExtBlocks));
-                if (has) x++;
+            foreach (var pair in inventory)
+            {
+                bulk.AddRange(Packet.SetInventoryOrder(pair.Key, x, player.Session.hasExtBlocks));
+                x++;
             }
+
             player.Send(bulk.ToArray());
         }
         public static void SendInventory(MCGalaxy.Player player)
         {
-            if (player.Level != DesertCubePlugin.Bus.Level) return;
+            if (player.Level.name != DesertCubePlugin.Config.BusLevel) return;
             if (!player.Session.hasCpe) return;
 
             List<byte> bulk = new List<byte>();

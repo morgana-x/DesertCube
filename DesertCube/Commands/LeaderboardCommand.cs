@@ -1,10 +1,5 @@
 ﻿using MCGalaxy;
-using System;
-using System.Collections.Generic;
-using System.Drawing.Printing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DesertCube.Commands
 {
@@ -12,7 +7,7 @@ namespace DesertCube.Commands
     {
         public override string name => "leaderboard";
 
-        public override string type => "fun";
+        public override string type => "Bus";
 
         public override LevelPermission defaultRank => LevelPermission.Guest;
         public override void Help(Player p)

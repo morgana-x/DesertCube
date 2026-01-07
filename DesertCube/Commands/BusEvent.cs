@@ -6,7 +6,7 @@ namespace DesertCube.Commands
     {
         public override string name => "busevent";
 
-        public override string type => "fun";
+        public override string type => "BusAdmin";
 
         public override LevelPermission defaultRank => LevelPermission.Owner;
 

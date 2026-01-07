@@ -6,7 +6,7 @@ namespace DesertCube.Commands
     {
         public override string name => "buslevel";
 
-        public override string type => "map";
+        public override string type => "BusAdmin";
 
         public override LevelPermission defaultRank => LevelPermission.Owner;
         public override void Help(Player p)
@@ -23,6 +23,12 @@ namespace DesertCube.Commands
                 return;
             }
             string level = arguments[0];
+
+            if (level.Trim() == "")
+            {
+                p.Message("The current configured level is \"" + DesertCubePlugin.Config.BusLevel + "\"!");
+                return;
+            }
 
             if (!LevelInfo.MapExists(level))
             {

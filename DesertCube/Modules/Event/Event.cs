@@ -24,7 +24,7 @@ namespace DesertCube.Modules.Event
         public static void Load()
         {
             ScheduleEventTask = MCGalaxy.Server.MainScheduler.QueueRepeat(ChooseEventTask, null, TimeSpan.FromSeconds(60));
-            nextEvent = DateTime.Now.AddHours(rnd.Next(4, 6)); // Ensure event is scheduled sometime later
+            nextEvent = DateTime.Now.AddHours(rnd.Next(5, 6)); // Ensure event is scheduled sometime later
         }
 
         public static void Unload()
@@ -35,7 +35,7 @@ namespace DesertCube.Modules.Event
         public static void StartEvent(EventBase evnt)
         {
             StopEvent();
-            nextEvent = DateTime.Now.AddHours(rnd.Next(4, 6));
+            nextEvent = DateTime.Now.AddHours(rnd.Next(7, 12));
             CurrentEvent = evnt;
             CurrentEventTask = eventScheduler.QueueOnce(RunEvent, null, TimeSpan.Zero);
         }

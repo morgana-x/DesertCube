@@ -1,6 +1,7 @@
-﻿using MCGalaxy.SQL;
+﻿using MCGalaxy;
+using MCGalaxy.SQL;
+using System;
 using System.Collections.Generic;
-
 
 namespace DesertCube.Modules.Player
 {
@@ -14,8 +15,14 @@ namespace DesertCube.Modules.Player
         private const string TableName = "desertbus_player";
         public static void Load()
         {
-            Database.CreateTable(TableName, DesertBusPlayerTable);
-            Database.AddColumn(TableName, DesertBusPlayerTable[2], string.Empty); // Just for adding the new column, will spit error in console if it's already there
+            try
+            {
+                Database.CreateTable(TableName, DesertBusPlayerTable);
+            }
+            catch(Exception e)
+            {
+                Logger.Log(LogType.ConsoleMessage, "desertbus_player already defined");
+            }
         }
         public static void Unload()
         {

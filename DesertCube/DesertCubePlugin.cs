@@ -51,6 +51,8 @@ namespace DesertCube
 
             Modules.Chat.Cef.Load();
 
+            Modules.Server.Christmas.Load();
+            Modules.Server.Discord.Load();
             Modules.Server.Hint.Load();
             Modules.Server.Journey.Load();
             Modules.Server.Name.Load();
@@ -86,6 +88,8 @@ namespace DesertCube
 
             Modules.Chat.Cef.Unload();
 
+            Modules.Server.Christmas.Unload();
+            Modules.Server.Discord.Unload();
             Modules.Server.Hint.Unload();
             Modules.Server.Journey.Unload();
             Modules.Server.Name.Unload();

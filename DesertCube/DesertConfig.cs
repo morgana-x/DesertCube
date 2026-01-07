@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using MCGalaxy;
+using System.IO;
 
 namespace DesertCube
 {
@@ -35,6 +36,8 @@ namespace DesertCube
             config.ServerNameSuffix = configs[5].Split('=')[1].TrimEnd();
             config.DestinationName = configs[6].Split('=')[1].TrimEnd();
             config.OriginName = configs[7].Split('=')[1].TrimEnd();
+
+            Logger.Log(LogType.ConsoleMessage, "Bus Level:" + config.BusLevel);
             return config;
         }
 

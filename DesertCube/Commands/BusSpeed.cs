@@ -7,7 +7,7 @@ namespace DesertCube.Commands
     {
         public override string name => "busspeed";
 
-        public override string type => "map";
+        public override string type => "Bus";
 
         public override LevelPermission defaultRank => LevelPermission.Guest;
 

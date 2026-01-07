@@ -1,10 +1,5 @@
 ﻿using MCGalaxy;
 using MCGalaxy.Commands;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DesertCube.Commands
 {
@@ -12,7 +7,7 @@ namespace DesertCube.Commands
     {
         public override string name => "pointsset";
 
-        public override string type => "Moderation";
+        public override string type => "BusAdmin";
 
         public override LevelPermission defaultRank => LevelPermission.Owner;
 

@@ -29,6 +29,7 @@ namespace DesertCube.Modules.Player
 
             foreach (var player in PlayerInfo.Online.Items)
             {
+                if (!player.Level.Config.MOTD.Contains("+hold")) continue;
                 if (player.Model == "sit")
                     continue;
 

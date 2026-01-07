@@ -1,4 +1,5 @@
-﻿using MCGalaxy.Tasks;
+﻿using DesertCube.Modules.Server;
+using MCGalaxy.Tasks;
 
 namespace DesertCube.Modules.Desert
 {
@@ -39,6 +40,8 @@ namespace DesertCube.Modules.Desert
             if (p.level != DesertCubePlugin.Bus.Level) return;
             if (!p.Session.Supports("EnvMapAspect", 2) && !p.Session.Supports("EnvMapAspect", 1)) return;
             p.Send(MCGalaxy.Network.Packet.EnvMapProperty(MCGalaxy.EnvProp.MaxFog, CurrentFog));
+            if (Christmas.IsChristmasMonth())
+                p.Send(MCGalaxy.Network.Packet.EnvMapProperty(MCGalaxy.EnvProp.Weather, 2));
         }
 
         static void OnSentMap(MCGalaxy.Player p, MCGalaxy.Level prev, MCGalaxy.Level current)

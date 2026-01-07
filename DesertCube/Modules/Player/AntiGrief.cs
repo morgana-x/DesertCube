@@ -39,7 +39,7 @@ namespace DesertCube.Modules.Player
         private static void SendBlockPerms(MCGalaxy.Player player)
         {
             if (!player.Session.hasCpe) return;
-            if (player.Level != DesertCubePlugin.Bus.Level) return;
+            if (player.Level.name != DesertCubePlugin.Config.BusLevel) return; 
             if (CanBuild(player)) { player.SendCurrentBlockPermissions(); return; }
     
 
@@ -52,7 +52,7 @@ namespace DesertCube.Modules.Player
         }
         private static void EventPlayerAction(MCGalaxy.Player player, PlayerAction action, string message, bool stealth)
         {
-            if (player.Level != DesertCubePlugin.Bus.Level) return;
+            if (player.Level.name != DesertCubePlugin.Config.BusLevel) return;
             if (action != PlayerAction.Referee && action != PlayerAction.UnReferee) return;
 
             player.Game.Referee = (action == PlayerAction.Referee);
@@ -67,7 +67,7 @@ namespace DesertCube.Modules.Player
         }
         private static void EventPlayerSpawn(MCGalaxy.Player player, ref Position pos, ref byte yaw, ref byte pitch, bool respawning)
         {
-            if (player.Level != DesertCubePlugin.Bus.Level) return;
+            if (player.Level.name != DesertCubePlugin.Config.BusLevel) return;
             SendBlockPerms(player);
             Inventory.SendInventory(player);
         }

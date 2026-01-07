@@ -7,7 +7,7 @@ namespace DesertCube.Commands
     {
         public override string name => "configreload";
 
-        public override string type => "fun";
+        public override string type => "BusAdmin";
 
         public override LevelPermission defaultRank => LevelPermission.Owner;
 

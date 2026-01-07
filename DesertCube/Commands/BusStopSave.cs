@@ -6,7 +6,7 @@ namespace DesertCube.Commands
     {
         public override string name => "busstopsave";
 
-        public override string type => "building";
+        public override string type => "BusAdmin";
 
         public override LevelPermission defaultRank => LevelPermission.Owner;
         public override void Help(Player p)
