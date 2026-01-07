@@ -13,7 +13,7 @@ namespace DesertCube.Modules.Item
         static Dictionary<ushort, Sound.SoundDefinition> SoundEffects = new Dictionary<ushort, Sound.SoundDefinition>();
         public static void Load()
         {
-            AddSnack(66, "Crossiant", 89, 18, DefaultSound);
+            AddSnack(66, "Croissant", 89, 18, DefaultSound);
             AddSnack(67, "Cookie", 90, 10, CookieSound);
             AddSnack(68, "Bread", 91, 18, DefaultSound);
             AddSnack(69, "Chips", 92, 16, ChipSound);
