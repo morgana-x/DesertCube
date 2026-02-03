@@ -120,7 +120,7 @@ namespace DesertCube.Modules.Desert
             var m = Models[name];
             bot.DisplayName = "";
             bot.SkinName = m.Skin;
-            bot.UpdateModel(m.Model);
+            bot.GlobalSpawn();
 
             var rnd_z = m.GetRandomPos(lvl);
            // bot.autoBroadcastPosition = true;
