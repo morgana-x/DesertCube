@@ -164,14 +164,14 @@ namespace DesertCube.Modules.Desert
                 {
                     //bot.autoBroadcastPosition = false;
                     bot.Pos = new Position(32 * (lvl.Width + 1024), -2048, 0);
-                    if (lvl != null)
+                   /* if (lvl != null)
                     {
                         foreach (var p in lvl.players)
                         {
                             p.EntityList.GetID(bot, out byte id);
                             p.Send(Packet.Teleport(id, bot.Pos, bot.Rot, p.Supports("ExtEntityPositions")));
                         }
-                    }
+                    }*/
                     continue;
                 }
             }
