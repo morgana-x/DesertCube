@@ -160,7 +160,7 @@ namespace DesertCube.Modules.Desert
                     bot.Pos.Y, 
                     bot.Pos.Z)
                  ;
-                if (bot.Pos.X <= (lvl != null ? -(lvl.Width + 1024) : -1024))
+                if (bot.Pos.X <= (lvl != null ? -32 *(lvl.Width + 1024) : -32*1024))
                 {
                     //bot.autoBroadcastPosition = false;
                     bot.Pos = new Position(32 * (lvl.Width + 1024), -2048, 0);
