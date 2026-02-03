@@ -32,7 +32,7 @@ namespace DesertCube.Modules.Desert
 
         }
 
-        public override void Tick()
+        public override void Tick(float curTime)
         {
             if (!AtStop) return;
             if (DateTime.Now < DesertCubePlugin.Bus.stopUntil) return;

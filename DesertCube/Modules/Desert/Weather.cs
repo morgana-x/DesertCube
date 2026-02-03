@@ -5,23 +5,20 @@ namespace DesertCube.Modules.Desert
 {
     public class Weather : DesertModule // This whole module is pretty lousy, refactor later, was made for sandstorm event so far
     {
-        static SchedulerTask weatherTask;
 
         public static int CurrentFog = int.MaxValue;
         public static bool Changed = false;
         public override void Load()
         {
-            weatherTask = MCGalaxy.Server.MainScheduler.QueueRepeat(WeatherTick, null, System.TimeSpan.FromSeconds(2));
             MCGalaxy.Events.PlayerEvents.OnSentMapEvent.Register(OnSentMap, MCGalaxy.Priority.Normal);
         }
 
         public override void Unload()
         {
             MCGalaxy.Events.PlayerEvents.OnSentMapEvent.Unregister(OnSentMap);
-            MCGalaxy.Server.MainScheduler.Cancel(weatherTask);
         }
 
-        static void WeatherTick(SchedulerTask task)
+        public override void Tick(float curTime)
         {
             if (!Changed) return;
             Changed = false;

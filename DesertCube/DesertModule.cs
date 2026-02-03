@@ -4,8 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DesertCube
 {
@@ -13,23 +11,23 @@ namespace DesertCube
     {
         public abstract void Load();
         public abstract void Unload();
-        public virtual void Tick() { }
+
+        public virtual void PostLoad() { }
+        public virtual void Tick(float curTime) { }
 
         public static Dictionary<Type, DesertModule> LoadedModules = new Dictionary<Type, DesertModule>();
 
         public static SchedulerTask TickTask;
         public static void LoadModules()
         {
-
             var classes = Assembly.GetExecutingAssembly()
-                       .GetTypes()
-                       .Where(t => t.IsClass && t.Namespace.StartsWith("DesertCube.Modules"))
+                       .GetTypes().Where(t => t.IsClass && t.Namespace != null && t.Namespace.StartsWith("DesertCube.Modules"))
                        .ToList();
 
             foreach (var type in classes.Where((x) => { return x.IsSubclassOf(typeof(DesertModule)); }))
                 AddModule(type);
 
-            TickTask = MCGalaxy.Server.MainScheduler.QueueRepeat(TickModules, null, TimeSpan.FromMilliseconds(100));
+            TickTask = MCGalaxy.Server.MainScheduler.QueueRepeat(TickModules, null, TimeSpan.FromMilliseconds(30));
         }
 
         public static void UnloadModules()
@@ -46,12 +44,12 @@ namespace DesertCube
         static void TickModules(SchedulerTask t)
         {
             TickTask = t;
-
+            float curTime = 1f - (float)t.Delay.TotalSeconds;
             foreach (var m in LoadedModules.Values)
             {
                 try
                 {
-                    m.Tick();
+                    m.Tick(curTime);
                 }
                 catch (Exception e)
                 {
@@ -62,9 +60,9 @@ namespace DesertCube
 
         static void AddModule(Type type)
         {
-            var module = Activator.CreateInstance(type);
-            ((DesertModule)module).Load();
-            LoadedModules.Add(type, (DesertModule)module);
+            DesertModule module = (DesertModule)Activator.CreateInstance(type);
+            module.Load();
+            LoadedModules.Add(type, module);
             Logger.Log(LogType.ConsoleMessage, "Loaded module " + type.Name);
         }
 

@@ -37,7 +37,7 @@ namespace DesertCube.Commands
             }
             DesertCubePlugin.Config.BusLevel = level;
             DesertCubePlugin.Bus.SetLevel(level);
-            DesertConfig.Save(DesertCubePlugin.Config);
+            DesertConfigManager.Save(DesertCubePlugin.Config);
             p.Message($"Set Level to {level}");
         }
     }

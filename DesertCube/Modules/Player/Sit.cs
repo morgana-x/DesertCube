@@ -8,14 +8,10 @@ namespace DesertCube.Modules.Player
     {
         public override void Load()
         {
-            sitTask = MCGalaxy.Server.MainScheduler.QueueRepeat(TickPlayerSit, null, TimeSpan.FromSeconds(0.25f));
         }
         public override void Unload()
         {
-            MCGalaxy.Server.MainScheduler.Cancel(sitTask);
         }
-
-        static SchedulerTask sitTask;
 
         static bool IsSeated(MCGalaxy.Player player)
         {
@@ -26,9 +22,12 @@ namespace DesertCube.Modules.Player
 
             return true;
         }
-        private static void TickPlayerSit(SchedulerTask task)
+
+        DateTime nextSit = DateTime.Now;
+        public override void Tick(float curTime)
         {
-            sitTask = task;
+            if (DateTime.Now < nextSit) return;
+            nextSit = DateTime.Now.AddSeconds(0.25f);
 
             foreach (var player in PlayerInfo.Online.Items)
             {

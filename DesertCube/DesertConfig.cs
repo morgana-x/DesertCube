@@ -1,59 +1,88 @@
 ﻿using MCGalaxy;
+using MCGalaxy.Config;
+using System;
 using System.IO;
 
 namespace DesertCube
 {
-    public class DesertConfig
+
+    public sealed class DesertConfig
     {
-        public string BusLevel { get; set; } = "desertbus";
-        public float BusMaxSpeed { get; set; } = 20f; // meters per second
-        public float BusAcceleration { get; set; } = 3f;  // meters per second
-        public float BusDecceleration { get; set; } = 1f; // meters per second
+        [ConfigString("bus-level", "Bus", "desertbus", false)]
+        public string BusLevel  = "desertbus";
 
-        public int DestinationDistance { get; set; } = 580000; // Meters
+        [ConfigFloat("max-speed", "Bus", 20f)]
+        public float BusMaxSpeed  = 20f; // meters per second
 
-        public string ServerNameSuffix { get; set; } = " | %dkm left until %p!!!";
+        [ConfigFloat("acceleration-rate", "Bus", 3f)]
+        public float BusAcceleration  = 3f;  // meters per second
 
-        public string DestinationName { get; set; } = "Vegas";
+        [ConfigFloat("decceleration-rate", "Bus", 1f)]
+        public float BusDecceleration  = 1f; // meters per second
 
-        public string OriginName { get; set; } = "Tucson, Arizona";
+        [ConfigInt("max-objects", "Desert", 15)]
+        public int MaxObjects = 15;
 
-        public static string SaveFolder { get { return Directory.GetCurrentDirectory()  + "/plugins/DesertBus"; } }
+        [ConfigInt("distance", "Journey", 580000, min:1)]
+        public int DestinationDistance  = 580000; // Meters
+
+        [ConfigString("destination-name", "Journey", "Vegas", false)]
+        public string DestinationName  = "Vegas";
+
+        [ConfigString("origin-name", "Journey", "Vegas", false)]
+        public string OriginName  = "Tucson, Arizona";
+
+        [ConfigString("server-name-suffix", "Server", " | %dkm left until %p!!!")]
+        public string ServerNameSuffix  = " | %dkm left until %p!!!";
+
+        [ConfigString("asset-url-prefix", "Server", "https://garbage.loan/f/morgana/")]
+        public string AssetUrlPrefix  = "https://garbage.loan/f/morgana/";
+
+        public static string SaveFolder { get { return DesertConfigManager.SaveFolder; } }
+    }
+
+    public class DesertConfigManager
+    {
+        public static string SaveFolder { get { return Directory.GetCurrentDirectory() + "/plugins/DesertBus"; } }
         static string SaveFile { get { return $"{SaveFolder}/config.txt"; } }
-        
-        public static DesertConfig Load()
+
+
+        internal static ConfigElement[] desertConfig;
+
+        public static void Load()
         {
-            DesertConfig config = new DesertConfig();
-            if (!File.Exists(SaveFile))
+            desertConfig = ConfigElement.GetAll(typeof(DesertConfig));
+    
+            if (!File.Exists(SaveFile) || !ConfigElement.ParseFile(desertConfig, SaveFile, DesertCubePlugin.Config))
+            {
                 CreateConfig();
-            string[] configs = File.ReadAllLines(SaveFile);
-            
-            config.BusLevel = configs[0].Split('=')[1].Trim();
-            config.BusMaxSpeed = float.Parse(configs[1].Split('=')[1].Trim());
-            config.BusAcceleration = float.Parse(configs[2].Split('=')[1].Trim());
-            config.BusDecceleration = float.Parse(configs[3].Split('=')[1].Trim());
-            config.DestinationDistance = int.Parse(configs[4].Split('=')[1].Trim());
-            config.ServerNameSuffix = configs[5].Split('=')[1].TrimEnd();
-            config.DestinationName = configs[6].Split('=')[1].TrimEnd();
-            config.OriginName = configs[7].Split('=')[1].TrimEnd();
-
-            Logger.Log(LogType.ConsoleMessage, "Bus Level:" + config.BusLevel);
-            return config;
+                return;
+            }
         }
-
+        static readonly object saveLock = new object();
         public static void Save(DesertConfig config)
         {
-            File.WriteAllText(SaveFile,
-            $"BusLevel={config.BusLevel}\nBusMaxSpeed={config.BusMaxSpeed}\nBusAcceleration={config.BusAcceleration}\nBusDecceleration={config.BusDecceleration}\nDestinationDistance={config.DestinationDistance}\nServerNameSuffix={config.ServerNameSuffix}\nDestinationName={config.DestinationName}\nOriginName={config.OriginName}");
+            try
+            {
+                lock (saveLock)
+                {
+                    using (StreamWriter w = FileIO.CreateGuarded(SaveFile))
+                        ConfigElement.Serialise(desertConfig, w, config);
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError("Error saving " + SaveFile, ex);
+            }
         }
+
         public static void CreateConfig()
         {
             if (!Directory.Exists(SaveFolder))
                 Directory.CreateDirectory(SaveFolder);
 
-            Save(new DesertConfig());
-
+            DesertCubePlugin.Config = new DesertConfig();
+            Save(DesertCubePlugin.Config);
         }
-
     }
 }

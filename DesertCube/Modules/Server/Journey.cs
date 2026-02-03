@@ -73,7 +73,7 @@ namespace DesertCube.Modules.Server
         }
 
         DateTime nextSave = DateTime.Now.AddMinutes(5);
-        public override void Tick()
+        public override void Tick(float curTime)
         {
             if (DateTime.Now < nextSave) return;
             nextSave = DateTime.Now.AddMinutes(5);

@@ -6,16 +6,9 @@ namespace DesertCube.Modules.Player
 {
     internal class Hold : DesertModule
     {
-        public override void Load()
-        {
-            holdTask = MCGalaxy.Server.MainScheduler.QueueRepeat(TickPlayerHold, null, TimeSpan.FromSeconds(0.45f));
-        }
-        public override void Unload()
-        {
-            MCGalaxy.Server.MainScheduler.Cancel(holdTask);
-        }
+        public override void Load() { }
+        public override void Unload() { }
 
-        static SchedulerTask holdTask;
 
         static string GetModel(int holding)
         {
@@ -23,9 +16,12 @@ namespace DesertCube.Modules.Player
                 return "humanoid";
             return $"hold|1.{holding.ToString("D3")}";
         }
-        private static void TickPlayerHold(SchedulerTask task)
+
+        DateTime nextHold = DateTime.Now;
+        public override void Tick(float curTime)
         {
-            holdTask = task;
+            if (DateTime.Now < nextHold) return;
+            nextHold = DateTime.Now.AddSeconds(0.45f);
 
             foreach (var player in PlayerInfo.Online.Items)
             {

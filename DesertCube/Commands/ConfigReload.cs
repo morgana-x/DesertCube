@@ -19,7 +19,7 @@ namespace DesertCube.Commands
 
         public override void Use(Player p, string message)
         {
-            DesertConfig.Load();
+            DesertConfigManager.Load();
             p.Message("Reloaded config!");
         }
     }

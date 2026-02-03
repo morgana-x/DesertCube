@@ -1,5 +1,4 @@
-﻿using MCGalaxy.Tasks;
-using System;
+﻿using System;
 
 namespace DesertCube.Modules.Player
 {
@@ -7,19 +6,18 @@ namespace DesertCube.Modules.Player
     {
         public override void Load()
         {
-            leaveBehindTask = MCGalaxy.Server.MainScheduler.QueueRepeat(TickPlayerLeavebehind, null, TimeSpan.FromSeconds(0.25f));
         }
         public override void Unload()
         {
-            MCGalaxy.Server.MainScheduler.Cancel(leaveBehindTask);
         }
 
-        static SchedulerTask leaveBehindTask;
-        private static void TickPlayerLeavebehind(SchedulerTask task)
+        DateTime nextCheck = DateTime.Now;
+        public override void Tick(float curTime)
         {
-            leaveBehindTask = task;
             if (DesertCubePlugin.Bus.Level == null) return;
             if (DesertCubePlugin.Bus.BusSpeed == 0) return;
+            if (DateTime.Now < nextCheck) return;
+            nextCheck = DateTime.Now.AddSeconds(0.25f);
             foreach (var player in DesertCubePlugin.Bus.GetPlayers())
             {
                 if (player.Level.name != DesertCubePlugin.Config.BusLevel) continue;

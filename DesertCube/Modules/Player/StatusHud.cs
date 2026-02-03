@@ -9,15 +9,10 @@ namespace DesertCube.Modules.Player
     {
         public override void Load()
         {
-            statusHudTask = MCGalaxy.Server.MainScheduler.QueueRepeat(TickPlayerSit, null, TimeSpan.FromSeconds(1));
-            BroadcastStatus();
         }
         public override void Unload()
         {
-            MCGalaxy.Server.MainScheduler.Cancel(statusHudTask);
         }
-
-        static SchedulerTask statusHudTask;
 
         static string GetStatus1Message()
         {
@@ -64,9 +59,12 @@ namespace DesertCube.Modules.Player
                 UpdateStatus(player, CpeMessageType.Status2, message2);
             }
         }
-        private static void TickPlayerSit(SchedulerTask task)
+
+        DateTime nextStatus = DateTime.Now;
+        public override void Tick(float curTime)
         {
-            statusHudTask = task;
+            if (DateTime.Now < nextStatus) return;
+            nextStatus = DateTime.Now.AddSeconds(1);
             BroadcastStatus();
         }
     }

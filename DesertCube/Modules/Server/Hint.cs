@@ -27,7 +27,7 @@ namespace DesertCube.Modules.Server
         }
 
         DateTime nextHint = DateTime.Now;
-        public override void Tick()
+        public override void Tick(float curTime)
         {
             if (DateTime.Now < nextHint)
                 return;

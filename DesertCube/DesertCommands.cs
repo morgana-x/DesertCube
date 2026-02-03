@@ -15,8 +15,7 @@ namespace DesertCube
         {
 
             var classes = Assembly.GetExecutingAssembly()
-                       .GetTypes()
-                       .Where(t => t.IsClass && t.Namespace.StartsWith("DesertCube.Commands"))
+                       .GetTypes().Where(t => t.IsClass && t.Namespace != null && t.Namespace.StartsWith("DesertCube.Commands"))
                        .ToList();
 
             foreach (var type in classes.Where((x) => { return x.IsSubclassOf(typeof(Command2)); }))
@@ -38,7 +37,7 @@ namespace DesertCube
 
             Commands.Add(module);
 
-            Logger.Log(LogType.ConsoleMessage, "Loaded module " + type.Name);
+            Logger.Log(LogType.ConsoleMessage, "Loaded cmd " + type.Name);
         }
     }
 }
