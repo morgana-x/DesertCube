@@ -123,7 +123,7 @@ namespace DesertCube.Modules.Desert
             bot.UpdateModel(m.Model);
 
             var rnd_z = m.GetRandomPos(lvl);
-            bot.autoBroadcastPosition = true;
+           // bot.autoBroadcastPosition = true;
             bot.Pos = new Position(32 * (lvl.Width + 1024), (DesertCubePlugin.Bus.Level.Config.GetEnvProp(EnvProp.CloudsLevel) + 2) * 32, rnd_z * 32);
 
         }
@@ -162,7 +162,7 @@ namespace DesertCube.Modules.Desert
                  ;
                 if (bot.Pos.X <= (lvl != null ? -(lvl.Width + 1024) : -1024))
                 {
-                    bot.autoBroadcastPosition = false;
+                    //bot.autoBroadcastPosition = false;
                     bot.Pos = new Position(32 * (lvl.Width + 1024), -2048, 0);
                     if (lvl != null)
                     {
