@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace DesertCube.Modules.Server
 {
-    public class Time
+    public class Time : DesertModule
     {
         public static int CurrentTime = 5000;
 
@@ -27,7 +27,7 @@ namespace DesertCube.Modules.Server
 
         private const string TableName = "desertbus_time";
 
-        public static void Load()
+        public override void Load()
         {
             CurrentTime = DayNight.NightEnd + 100;
 
@@ -39,7 +39,7 @@ namespace DesertCube.Modules.Server
 
             timeTask = MCGalaxy.Server.MainScheduler.QueueRepeat(TimeTick, null, TimeSpan.FromSeconds(1));
         }
-        public static void Unload()
+        public override void Unload()
         {
             MCGalaxy.Server.MainScheduler.Cancel(timeTask);
             Save();

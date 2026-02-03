@@ -2,10 +2,10 @@
 
 namespace DesertCube.Modules.Server
 {
-    internal class Name
+    internal class Name : DesertModule
     {
         static string oldsoftwarename = "";
-        public static void Load()
+        public override void Load()
         {
             oldsoftwarename = MCGalaxy.Server.SoftwareNameVersioned;
 
@@ -17,7 +17,7 @@ namespace DesertCube.Modules.Server
             MCGalaxy.Events.ServerEvents.OnSendingHeartbeatEvent.Register(OnHeartbeat, MCGalaxy.Priority.High);
         }
 
-        public static void Unload()
+        public override void Unload()
         {
             MCGalaxy.Events.ServerEvents.OnSendingHeartbeatEvent.Unregister(OnHeartbeat);
             

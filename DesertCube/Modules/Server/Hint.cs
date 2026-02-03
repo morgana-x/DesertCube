@@ -1,10 +1,9 @@
-﻿using MCGalaxy.Tasks;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace DesertCube.Modules.Server
 {
-    public class Hint
+    public class Hint : DesertModule
     {
         public static List<string> Hints = new List<string>()
         {
@@ -20,19 +19,19 @@ namespace DesertCube.Modules.Server
         };
 
         public static int index = 0;
-        public static void Load()
+        public override void Load()
         {
-            hintTask = MCGalaxy.Server.MainScheduler.QueueRepeat(TickPlayerSit, null, TimeSpan.FromMinutes(60));
         }
-        public static void Unload()
+        public override void Unload()
         {
-            MCGalaxy.Server.MainScheduler.Cancel(hintTask);
         }
 
-        static SchedulerTask hintTask;
-        private static void TickPlayerSit(SchedulerTask task)
+        DateTime nextHint = DateTime.Now;
+        public override void Tick()
         {
-            hintTask = task;
+            if (DateTime.Now < nextHint)
+                return;
+            nextHint = DateTime.Now.AddMinutes(60);
 
             foreach (var p in DesertCubePlugin.Bus.GetPlayers())
                 p.Message(Hints[index]);

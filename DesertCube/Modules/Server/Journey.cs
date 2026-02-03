@@ -8,7 +8,7 @@ using System.Collections.Generic;
 
 namespace DesertCube.Modules.Server
 {
-    public class Journey
+    public class Journey : DesertModule
     {
 
         public enum DestinationType
@@ -35,11 +35,9 @@ namespace DesertCube.Modules.Server
         public static float RemainingDistance { get { return (DesertCubePlugin.Config.DestinationDistance - TotalDistance); } }
         public static int RemainingDistanceKilometers { get { return (int)Math.Ceiling(RemainingDistance / 1000f); } }
 
-
         private const string TableName = "desertbus_journey";
 
-        static SchedulerTask autosavetask;
-        public static void Load()
+        public override void Load()
         {
             try
             {
@@ -57,12 +55,10 @@ namespace DesertCube.Modules.Server
                 Destination = (DestinationType)(byte.Parse(pRows[0][2]));
             }
 
-            autosavetask = MCGalaxy.Server.MainScheduler.QueueRepeat(AutoSave, null, TimeSpan.FromMinutes(5));
         }
 
-        public static void Unload()
+        public override void Unload()
         {
-            MCGalaxy.Server.MainScheduler.Cancel(autosavetask);
             Save();
         }
 
@@ -76,9 +72,12 @@ namespace DesertCube.Modules.Server
                 Database.AddRow(TableName, "id, distance, destination", 0, (ulong)TotalDistance, destination);
         }
 
-        static void AutoSave(SchedulerTask task)
+        DateTime nextSave = DateTime.Now.AddMinutes(5);
+        public override void Tick()
         {
-            autosavetask = task;
+            if (DateTime.Now < nextSave) return;
+            nextSave = DateTime.Now.AddMinutes(5);
+
             Save();
         }
 

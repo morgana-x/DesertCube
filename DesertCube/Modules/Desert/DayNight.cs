@@ -4,7 +4,7 @@ using MCGalaxy.Tasks;
 using System;
 namespace DesertCube.Modules.Desert
 {
-    internal class DayNight
+    internal class DayNight : DesertModule
     {
         public static bool IsNight => Time.CurrentTime > NightStart || Time.CurrentTime < NightEnd;
         public static bool lastNight = true;
@@ -13,20 +13,18 @@ namespace DesertCube.Modules.Desert
         public static int NightStart = (int)(Time.MaxTime * 0.78f);
 
         public static EnvConfigDayNight CurrentEnv => IsNight ? NightConfig : DayConfig;
-        static SchedulerTask dayNightTask;
 
-        public static void Load()
+
+        public override void Load()
         {
             MCGalaxy.Events.PlayerEvents.OnSentMapEvent.Register(OnSentMap, MCGalaxy.Priority.Low);
-            dayNightTask = MCGalaxy.Server.MainScheduler.QueueRepeat(DayNightTick, null, TimeSpan.FromSeconds(2));
 
             SendEnv(DesertCubePlugin.Bus.Level, CurrentEnv);
         }
 
-        public static void Unload()
+        public override void Unload()
         {
             MCGalaxy.Events.PlayerEvents.OnSentMapEvent.Unregister(OnSentMap);
-            MCGalaxy.Server.MainScheduler.Cancel(dayNightTask);
         }
 
         static void OnSentMap(MCGalaxy.Player p, MCGalaxy.Level prev, MCGalaxy.Level current)
@@ -35,8 +33,12 @@ namespace DesertCube.Modules.Desert
                 SendEnv(p, CurrentEnv);
         }
 
-        static void DayNightTick(SchedulerTask task)
+        static DateTime nextTick = DateTime.Now;
+        public override void Tick()
         {
+            if (DateTime.Now < nextTick) return;
+            nextTick = DateTime.Now.AddSeconds(2);
+
             if (IsNight == lastNight) return;
             lastNight = IsNight;
 

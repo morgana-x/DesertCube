@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace DesertCube.Modules.Desert
 {
-    internal class Stop
+    public class Stop : DesertModule
     {
 
         public static int nextStopMeters = 0;
@@ -17,28 +17,23 @@ namespace DesertCube.Modules.Desert
         public static string nextStop = "";
         public static bool AtStop = false;
 
-        static SchedulerTask busstoptask;
-        public static void Load()
+        public override void Load()
         {
             nextStopMeters = (int)Journey.TotalDistance + rnd.Next(10000, 50000);
             nextStop = RandomStop();
 
-            busstoptask = MCGalaxy.Server.MainScheduler.QueueRepeat(BusStopTick, null, TimeSpan.FromSeconds(2));
         }
 
-        public static void Unload()
+        public override void Unload()
         {
             if (DesertCubePlugin.Bus.Level != null)
                 ClearBusStop(DesertCubePlugin.Bus.Level);
 
 
-            MCGalaxy.Server.MainScheduler.Cancel(busstoptask);
         }
 
-        static void BusStopTick(SchedulerTask task)
+        public override void Tick()
         {
-            busstoptask = task;
-
             if (!AtStop) return;
             if (DateTime.Now < DesertCubePlugin.Bus.stopUntil) return;
 

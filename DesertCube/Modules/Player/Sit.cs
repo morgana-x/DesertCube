@@ -4,13 +4,13 @@ using System;
 
 namespace DesertCube.Modules.Player
 {
-    internal class Sit
+    internal class Sit : DesertModule
     {
-        public static void Load()
+        public override void Load()
         {
             sitTask = MCGalaxy.Server.MainScheduler.QueueRepeat(TickPlayerSit, null, TimeSpan.FromSeconds(0.25f));
         }
-        public static void Unload()
+        public override void Unload()
         {
             MCGalaxy.Server.MainScheduler.Cancel(sitTask);
         }

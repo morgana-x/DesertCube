@@ -3,14 +3,14 @@ using MCGalaxy;
 
 namespace DesertCube.Modules.Chat
 {
-    internal class Cef
+    internal class Cef : DesertModule
     {
-        public static void Load()
+        public override void Load()
         {
             OnChatEvent.Register(HandleChatEvent, Priority.Low);
         }
 
-        public static void Unload()
+        public override void Unload()
         {
             OnChatEvent.Unregister(HandleChatEvent);
         }
@@ -21,7 +21,7 @@ namespace DesertCube.Modules.Chat
             return true;
         }
         // Make sure non cef players dont see cef players' spammed commands in chat
-        static void HandleChatEvent(ChatScope scope, MCGalaxy.Player source, ref string msg, object arg, ref ChatMessageFilter filter, bool relay = false)
+        void HandleChatEvent(ChatScope scope, MCGalaxy.Player source, ref string msg, object arg, ref ChatMessageFilter filter, bool relay = false)
         {
             if (msg.CaselessContains("cef ") && !msg.StartsWith(" ") && source.Session.ClientName().CaselessContains("cef"))
                 filter = filterCef;

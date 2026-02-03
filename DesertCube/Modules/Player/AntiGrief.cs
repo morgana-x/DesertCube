@@ -6,16 +6,16 @@ using MCGalaxy.Commands.Fun;
 
 namespace DesertCube.Modules.Player
 {
-    internal class AntiGrief
+    internal class AntiGrief : DesertModule
     {
-        public static void Load()
+        public override void Load()
         {
             OnBlockChangingEvent.Register(EventPlayerBlockChange, Priority.High);
             OnPlayerSpawningEvent.Register(EventPlayerSpawn, Priority.High);
             OnPlayerActionEvent.Register(EventPlayerAction, Priority.High);
             OnSentMapEvent.Register(EventSentMap, Priority.High);   
         }
-        public static void Unload()
+        public override void Unload()
         {
             OnBlockChangingEvent.Unregister(EventPlayerBlockChange);
             OnPlayerSpawningEvent.Unregister(EventPlayerSpawn);

@@ -4,15 +4,15 @@ using System;
 
 namespace DesertCube.Modules.Player
 {
-    public class Sound
+    public class Sound : DesertModule
     {
         const string PlaySoundCPE = "PlaySound";
-        public static void Load()
+        public override void Load()
         {
             AddCPE(PlaySoundCPE, "Enables server to send sounds", 1);
         }
 
-        public static void Unload()
+        public override void Unload()
         {
 
         }

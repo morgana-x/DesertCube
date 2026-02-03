@@ -4,16 +4,16 @@ using System;
 
 namespace DesertCube.Modules.Server
 {
-    public class Discord
+    public class Discord : DesertModule
     {
         static string oldConfigStatusMessage = "";
         static string ConfigStatusMessage = "Driving to {DEST} with {PLAYERS} players! {DIST} remaining!";
-        public static void Load()
+        public override void Load()
         {
             oldConfigStatusMessage = DiscordPlugin.Config.StatusMessage;
             hintTask = MCGalaxy.Server.MainScheduler.QueueRepeat(TickPlayerSit, null, TimeSpan.FromMinutes(1));
         }
-        public static void Unload()
+        public override void Unload()
         {
             MCGalaxy.Server.MainScheduler.Cancel(hintTask);
             DiscordPlugin.Config.StatusMessage = oldConfigStatusMessage;

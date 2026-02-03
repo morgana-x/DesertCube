@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace DesertCube.Modules.Player
 {
-    public class Effect
+    public class Effect : DesertModule
     {
         public class DefinedEffect
         {
@@ -53,12 +53,12 @@ namespace DesertCube.Modules.Player
         }
         public static Dictionary<byte, DefinedEffect> ParticleDefs = new Dictionary<byte, DefinedEffect>();
 
-        public static void Load()
+        public override void Load()
         {
             MCGalaxy.Events.PlayerEvents.OnSentMapEvent.Register(EventPlayerSentMap, Priority.Normal);
         }
 
-        public static void Unload()
+        public override void Unload()
         {
             MCGalaxy.Events.PlayerEvents.OnSentMapEvent.Unregister(EventPlayerSentMap);
         }

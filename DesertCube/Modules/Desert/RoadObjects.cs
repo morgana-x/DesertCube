@@ -4,18 +4,23 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DesertCube.Modules.Vegas
+namespace DesertCube.Modules.Desert
 {
-    internal class Gamble : DesertModule
+    public class RoadObjects : DesertModule
     {
         public override void Load()
         {
-
+            
         }
 
         public override void Unload()
         {
+            
+        }
 
+        public override void Tick()
+        {
+            
         }
     }
 }

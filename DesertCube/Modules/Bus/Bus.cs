@@ -8,9 +8,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace DesertCube.DesertBus
+namespace DesertCube.Modules.Bus
 {
-    public class DesertBus
+    public class Bus : DesertModule
     {
         public volatile float BusSpeed = 0;
 
@@ -18,8 +18,8 @@ namespace DesertCube.DesertBus
 
         public Level Level = null;
 
-        public Vec3U16 ButtonPosition = new Vec3U16(72, 21, 62 );
-        public Vec3U16 DoorPosition = new Vec3U16(69, 18, 56 );
+        public Vec3U16 ButtonPosition = new Vec3U16(72, 21, 62);
+        public Vec3U16 DoorPosition = new Vec3U16(69, 18, 56);
 
         public Vec3U16 Min = new Vec3U16(50, 18, 56);
         public Vec3U16 Max = new Vec3U16(72, 50, 64);
@@ -27,18 +27,16 @@ namespace DesertCube.DesertBus
         DateTime nextDecel = DateTime.Now;
 
         public DateTime stopUntil = DateTime.Now;
-        public DesertBus(string level)
-        {
-            SetLevel(level);
-            Load();
-        }
+
         public void SetLevel(string level)
         {
             Level = LevelInfo.FindExact(level);
         }
 
-        public void Load()
+        public override void Load()
         {
+            SetLevel(DesertCubePlugin.Config.BusLevel);
+
             tickTask = MCGalaxy.Server.MainScheduler.QueueRepeat(Tick, null, TimeSpan.FromMilliseconds(500));
 
             OnPlayerClickEvent.Register(OnPlayerClick, Priority.Normal);
@@ -46,7 +44,7 @@ namespace DesertCube.DesertBus
             OnSentMapEvent.Register(OnPlayerSentMap, Priority.Normal);
             SetSpeed(0);
         }
-        public void Unload()
+        public override void Unload()
         {
             MCGalaxy.Server.MainScheduler.Cancel(tickTask);
             OnPlayerClickEvent.Unregister(OnPlayerClick);
@@ -54,36 +52,37 @@ namespace DesertCube.DesertBus
             OnSentMapEvent.Unregister(OnPlayerSentMap);
         }
 
-        void OnPlayerInteract(Player p, ushort x, ushort y, ushort z)
+        void OnPlayerInteract(MCGalaxy.Player p, ushort x, ushort y, ushort z)
         {
+            if (p.Level != Level) return;
             if (x == ButtonPosition.X && y == ButtonPosition.Y && z == ButtonPosition.Z)
                 Accelerate(DesertCubePlugin.Config.BusAcceleration);
         }
-        void OnPlayerClick(Player p, MouseButton btn, MouseAction action, ushort yaw, ushort pitch, byte entityID, ushort x, ushort y, ushort z, TargetBlockFace face)
+        void OnPlayerClick(MCGalaxy.Player p, MouseButton btn, MouseAction action, ushort yaw, ushort pitch, byte entityID, ushort x, ushort y, ushort z, TargetBlockFace face)
         {
             if (Level == p.level)
                 OnPlayerInteract(p, x, y, z);
         }
-       
-        void OnPlayerChangingBlock(Player p, ushort x, ushort y, ushort z, ushort block, bool placing, ref bool cancel)
+
+        void OnPlayerChangingBlock(MCGalaxy.Player p, ushort x, ushort y, ushort z, ushort block, bool placing, ref bool cancel)
         {
             if (Level == p.level && !p.Session.hasCpe)
                 OnPlayerInteract(p, x, y, z); // Support for Classic 0.30 Clients
         }
-        void OnPlayerSentMap(Player p, Level prevLevl, Level level)
+        void OnPlayerSentMap(MCGalaxy.Player p, Level prevLevl, Level level)
         {
             if (level == Level)
                 SendBusSpeed(p);
         }
-        public List<Player> GetPlayers()
+        public List<MCGalaxy.Player> GetPlayers()
         {
             return PlayerInfo.Online.Items.Where((x) => x.Level == Level).ToList();
         }
 
         public bool InsideBus(Vec3U16 pos)
         {
-            return (pos.X >= Min.X) && (pos.Y >= Min.Y) && (pos.Z >= Min.Z) && 
-                (pos.X <= Max.X) && (pos.Y <= Max.Y) && (pos.Z <= Max.Z);
+            return pos.X >= Min.X && pos.Y >= Min.Y && pos.Z >= Min.Z &&
+                pos.X <= Max.X && pos.Y <= Max.Y && pos.Z <= Max.Z;
         }
 
         public bool InsideBus(MCGalaxy.Player p)
@@ -95,6 +94,7 @@ namespace DesertCube.DesertBus
         {
             tickTask = task;
 
+            if (Level == null) return;
             if (BusSpeed == 0) return;
 
             Journey.AddDistance(BusSpeed / 2f);
@@ -110,7 +110,7 @@ namespace DesertCube.DesertBus
         {
             if (BusSpeed >= DesertCubePlugin.Config.BusMaxSpeed) return;
             if (DateTime.Now < stopUntil) return;
-            if (BusSpeed == 0) { Modules.Desert.Stop.ClearBusStop(this.Level); }
+            if (BusSpeed == 0) { Desert.Stop.ClearBusStop(Level); }
             float speed = BusSpeed + amount;
 
             if (speed > DesertCubePlugin.Config.BusMaxSpeed)
@@ -129,26 +129,26 @@ namespace DesertCube.DesertBus
             SetSpeed(speed);
         }
 
-        public void SetDoor(ushort block=0)
+        public void SetDoor(ushort block = 0)
         {
             if (Level == null) return;
             for (int i = 0; i < 3; i++)
             {
                 if (Level.GetBlock(DoorPosition.X, (ushort)(DoorPosition.Y + i), DoorPosition.Z) == block) continue;
-                Level.UpdateBlock(Player.Console, DoorPosition.X, (ushort)(DoorPosition.Y + i), DoorPosition.Z, block);
+                Level.UpdateBlock(MCGalaxy.Player.Console, DoorPosition.X, (ushort)(DoorPosition.Y + i), DoorPosition.Z, block);
             }
         }
-        
+
         public int MsToCloud(float speed)
         {
             return (int)(BusSpeed * 5000);
         }
 
-        public void SendBusSpeed(Player player)
+        public void SendBusSpeed(MCGalaxy.Player player)
         {
             SendBusSpeed(player, MsToCloud(BusSpeed));
         }
-        public void SendBusSpeed(Player player, int speed)
+        public void SendBusSpeed(MCGalaxy.Player player, int speed)
         {
             if (!player.Session.hasCpe) return;
             player.Send(Packet.EnvMapProperty(EnvProp.CloudsSpeed, speed));
@@ -161,7 +161,7 @@ namespace DesertCube.DesertBus
 
         public void SetSpeed(float speed)
         {
-            if (speed == 0 && BusSpeed != 0) { Modules.Desert.Stop.ArriveBusStop(); }
+            if (speed == 0 && BusSpeed != 0) { Desert.Stop.ArriveBusStop(); }
             BusSpeed = speed;
             SendBusSpeedAll();
 
@@ -170,7 +170,7 @@ namespace DesertCube.DesertBus
 
         public void Broadcast(string message)
         {
-            foreach(var p in GetPlayers())
+            foreach (var p in GetPlayers())
                 p.Message(message);
         }
     }

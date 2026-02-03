@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace DesertCube.Modules.Player
 {
-    public class Inventory
+    public class Inventory : DesertModule
     {
         private static ColumnDesc[] DesertBusPlayerTable = new ColumnDesc[] {
             new ColumnDesc("name", ColumnType.VarChar, 16),
@@ -18,7 +18,7 @@ namespace DesertCube.Modules.Player
         private const string TableName = "desertbus_inventory";
 
         public static Dictionary<string, Dictionary<ushort, ushort>> Cache = new Dictionary<string, Dictionary<ushort, ushort>>();
-        public static void Load()
+        public override void Load()
         {
             Database.CreateTable(TableName, DesertBusPlayerTable);
             OnPlayerSpawningEvent.Register(EventPlayerSpawn, Priority.High);
@@ -27,7 +27,7 @@ namespace DesertCube.Modules.Player
             foreach (var pl in MCGalaxy.PlayerInfo.Online.Items)
                 SendBlockOrder(pl);
         }
-        public static void Unload()
+        public override void Unload()
         {
             OnPlayerSpawningEvent.Unregister(EventPlayerSpawn);
             OnSentMapEvent.Unregister(EventSentMap);

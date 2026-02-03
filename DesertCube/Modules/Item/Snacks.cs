@@ -7,11 +7,11 @@ using System;
 
 namespace DesertCube.Modules.Item
 {
-    public class Snacks
+    public class Snacks : DesertModule
     {
         static Dictionary<ushort, byte> ParticleEffects = new Dictionary<ushort, byte>();
         static Dictionary<ushort, Sound.SoundDefinition> SoundEffects = new Dictionary<ushort, Sound.SoundDefinition>();
-        public static void Load()
+        public override void Load()
         {
             AddSnack(66, "Crossiant", 89, 18, DefaultSound);
             AddSnack(67, "Cookie", 90, 10, CookieSound);
@@ -44,7 +44,7 @@ namespace DesertCube.Modules.Item
 
             MCGalaxy.Events.PlayerEvents.OnPlayerClickEvent.Register(OnPlayerClick, Priority.Normal);
         }
-        public static void Unload()
+        public override void Unload()
         {
             MCGalaxy.Events.PlayerEvents.OnPlayerClickEvent.Unregister(OnPlayerClick);
         }

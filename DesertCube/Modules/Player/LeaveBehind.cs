@@ -3,13 +3,13 @@ using System;
 
 namespace DesertCube.Modules.Player
 {
-    internal class LeaveBehind
+    internal class LeaveBehind : DesertModule
     {
-        public static void Load()
+        public override void Load()
         {
             leaveBehindTask = MCGalaxy.Server.MainScheduler.QueueRepeat(TickPlayerLeavebehind, null, TimeSpan.FromSeconds(0.25f));
         }
-        public static void Unload()
+        public override void Unload()
         {
             MCGalaxy.Server.MainScheduler.Cancel(leaveBehindTask);
         }

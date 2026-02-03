@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace DesertCube.Modules.Player
 {
-    public class Stats
+    public class Stats : DesertModule
     {
         private static ColumnDesc[] DesertBusPlayerTable = new ColumnDesc[] {
             new ColumnDesc("name", ColumnType.VarChar, 16),
@@ -13,7 +13,7 @@ namespace DesertCube.Modules.Player
             new ColumnDesc("distance", ColumnType.UInt64)
         };
         private const string TableName = "desertbus_player";
-        public static void Load()
+        public override void Load()
         {
             try
             {
@@ -24,7 +24,7 @@ namespace DesertCube.Modules.Player
                 Logger.Log(LogType.ConsoleMessage, "desertbus_player already defined");
             }
         }
-        public static void Unload()
+        public override void Unload()
         {
 
         }

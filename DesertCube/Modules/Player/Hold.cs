@@ -4,13 +4,13 @@ using System;
 
 namespace DesertCube.Modules.Player
 {
-    internal class Hold
+    internal class Hold : DesertModule
     {
-        public static void Load()
+        public override void Load()
         {
             holdTask = MCGalaxy.Server.MainScheduler.QueueRepeat(TickPlayerHold, null, TimeSpan.FromSeconds(0.45f));
         }
-        public static void Unload()
+        public override void Unload()
         {
             MCGalaxy.Server.MainScheduler.Cancel(holdTask);
         }

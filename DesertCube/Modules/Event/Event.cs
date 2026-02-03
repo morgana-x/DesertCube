@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace DesertCube.Modules.Event
 {
-    public class Event
+    public class Event : DesertModule
     {
         public static List<EventBase> Events = new List<EventBase>()
         { 
@@ -21,13 +21,13 @@ namespace DesertCube.Modules.Event
 
 
         static Scheduler eventScheduler = new Scheduler("desertbusevent");
-        public static void Load()
+        public override void Load()
         {
             ScheduleEventTask = MCGalaxy.Server.MainScheduler.QueueRepeat(ChooseEventTask, null, TimeSpan.FromSeconds(60));
             nextEvent = DateTime.Now.AddHours(rnd.Next(5, 6)); // Ensure event is scheduled sometime later
         }
 
-        public static void Unload()
+        public override void Unload()
         {
             StopEvent();
         }

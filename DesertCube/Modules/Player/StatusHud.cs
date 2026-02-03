@@ -5,14 +5,14 @@ using System;
 
 namespace DesertCube.Modules.Player
 {
-    internal class StatusHud
+    internal class StatusHud : DesertModule
     {
-        public static void Load()
+        public override void Load()
         {
             statusHudTask = MCGalaxy.Server.MainScheduler.QueueRepeat(TickPlayerSit, null, TimeSpan.FromSeconds(1));
             BroadcastStatus();
         }
-        public static void Unload()
+        public override void Unload()
         {
             MCGalaxy.Server.MainScheduler.Cancel(statusHudTask);
         }
