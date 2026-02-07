@@ -1,10 +1,9 @@
 ﻿using DesertCube.Modules.Server;
 using MCGalaxy;
 using MCGalaxy.Network;
-using MCGalaxy.Tasks;
 using System;
 using System.Collections.Generic;
-using System.Reflection.Emit;
+
 namespace DesertCube.Modules.Desert
 {
     internal class DayNight : DesertModule
@@ -82,11 +81,8 @@ namespace DesertCube.Modules.Desert
             p.Send(Packet.EnvColor((byte)EnvColour.SkyColour    , env.SkyColour[0] , (env.SkyColour[1])      , (env.SkyColour[2])));
             p.Send(Packet.EnvColor((byte)EnvColour.RoadColour   , env.RoadColour[0]     , (env.RoadColour[1])     , (env.RoadColour[2])));
 
-            if (!OverrideFog) // Dodgy logic cause im tired
-                p.Send(Packet.EnvColor((byte)EnvColour.FogColour    , env.FogColour[0]    , (env.FogColour[1])      , (env.FogColour[2])));
-            else
-                p.Send(Packet.EnvColor((byte)EnvColour.FogColour, OverrideFogColour[0], (OverrideFogColour[1]), (OverrideFogColour[2])));
-
+            p.Send(Packet.EnvColor((byte)EnvColour.FogColour    , env.FogColour[0]    , (env.FogColour[1])      , (env.FogColour[2])));
+          
             p.Send(Packet.EnvColor((byte)EnvColour.ShadowColour , env.ShadowColour[0]  , (env.ShadowColour[1])   , (env.ShadowColour[2])));
             p.Send(Packet.EnvColor((byte)EnvColour.SkyboxColour , env.SkyboxColour[0]   , (env.SkyboxColour[1])   , (env.SkyboxColour[2])));
             p.Send(Packet.EnvColor((byte)EnvColour.LightColour, env.SunlightColour[0], (env.SunlightColour[1]), (env.SunlightColour[2])));
@@ -155,7 +151,7 @@ namespace DesertCube.Modules.Desert
         };
 
         // This is dodgy I know... but it's 2am!
-        public static bool OverrideFog = false;
-        public static short[] OverrideFogColour = new short[] { (0xc9), (0xb8), (0x55) };
+       // public static bool OverrideFog = false;
+       // public static short[] OverrideFogColour = new short[] { (0xc9), (0xb8), (0x55) };
     }
 }

@@ -1,12 +1,7 @@
 ﻿using MCGalaxy;
-using MCGalaxy.Commands.Bots;
-using MCGalaxy.Network;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace DesertCube.Modules.Desert
 {
     public class RoadObjects : DesertModule
@@ -56,12 +51,13 @@ namespace DesertCube.Modules.Desert
             ["road_sign"] = new RoadSignModel("road_sign|4.5", "road_sign.png") { Chance =  0.05f},
             ["shrub"] = new RoadObjectModel("shrub|1.5", "shrub.png", posRange:32),
             ["shrub_med"] = new RoadObjectModel("shrub|2.5", "shrub.png"),
-            ["grass"] = new RoadObjectModel("shrub|1.5", "grass.png", posRange: 32),
-            ["grass_med"] = new RoadObjectModel("shrub|2.5", "grass.png"),
+         //   ["grass"] = new RoadObjectModel("shrub|1.5", "grass.png", posRange: 32),
+          //  ["grass_med"] = new RoadObjectModel("shrub|2.5", "grass.png"),
         };
 
         public  static List<PlayerBot> SpawnedObjects;
 
+        const int spawnDistance = 2048;
         public override void Load()
         {
             SpawnedObjects = new List<PlayerBot>();
@@ -78,8 +74,7 @@ namespace DesertCube.Modules.Desert
         public override void PostLoad()
         {
             if (DesertCubePlugin.Bus.Level == null) return;
-            foreach(var b in DesertCubePlugin.Bus.Level.Bots.Items)
-                if (b.name.StartsWith("r_obj_"))
+            foreach(var b in DesertCubePlugin.Bus.Level.Bots.Items.Where(x=>x.name.StartsWith("r_obj_")))
                     PlayerBot.Remove(b, false);
         }
 
@@ -96,18 +91,17 @@ namespace DesertCube.Modules.Desert
             var lvl = DesertCubePlugin.Bus.Level;
             if (lvl == null) return;
 
-            var m = Models[name];
 
-            PlayerBot bot = new PlayerBot($"r_obj_{count}", lvl) {DisplayName="", SkinName=m.Skin, Model=m.Model };
+            PlayerBot bot = new PlayerBot($"r_obj_{count}", lvl) {DisplayName=""};
             count++;
             if (count > 100)
                 count = 0;
 
-            var rnd_z = m.GetRandomPos(lvl);
-            bot.SetInitialPos(new Position(32*(lvl.Width + 1024), (DesertCubePlugin.Bus.Level.Config.GetEnvProp(EnvProp.CloudsLevel)+2) * 32, rnd_z * 32));
+            bot.SetInitialPos(new Position(32*(lvl.Width + spawnDistance), -2048, 0));
+            
             PlayerBot.Add(bot, false);
-
             SpawnedObjects.Add(bot);
+            SpawnObject(bot, getRandomModel());
         }
 
         public static void SpawnObject(PlayerBot bot, string name)
@@ -120,11 +114,12 @@ namespace DesertCube.Modules.Desert
             var m = Models[name];
             bot.DisplayName = "";
             bot.SkinName = m.Skin;
+            bot.SetModel(m.Model);
             bot.GlobalSpawn();
 
             var rnd_z = m.GetRandomPos(lvl);
            // bot.autoBroadcastPosition = true;
-            bot.Pos = new Position(32 * (lvl.Width + 1024), (DesertCubePlugin.Bus.Level.Config.GetEnvProp(EnvProp.CloudsLevel) + 2) * 32, rnd_z * 32);
+            bot.Pos = new Position(32 * (lvl.Width + spawnDistance), (DesertCubePlugin.Bus.Level.Config.GetEnvProp(EnvProp.CloudsLevel) + 2) * 32, rnd_z * 32);
 
         }
 
@@ -160,10 +155,10 @@ namespace DesertCube.Modules.Desert
                     bot.Pos.Y, 
                     bot.Pos.Z)
                  ;
-                if (bot.Pos.X <= (lvl != null ? -32 *(lvl.Width + 1024) : -32*1024))
+                if (bot.Pos.X <= (lvl != null ? -32 *(lvl.Width + spawnDistance) : -32* spawnDistance))
                 {
                     //bot.autoBroadcastPosition = false;
-                    bot.Pos = new Position(32 * (lvl.Width + 1024), -2048, 0);
+                    bot.Pos = new Position(32 * (lvl.Width + spawnDistance), -2048, 0);
                    /* if (lvl != null)
                     {
                         foreach (var p in lvl.players)

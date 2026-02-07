@@ -20,6 +20,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="Commands\BusBug.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Update="DesertBus\levels\desertbus.cw">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -65,7 +69,13 @@
     <None Update="DesertBus\texturepacks\desertbushd.zip">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="models\grass.png">
+    <None Update="models\insect.bbmodel">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="models\insect.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="models\insect_splat.bbmodel">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="models\road_sign.bbmodel">

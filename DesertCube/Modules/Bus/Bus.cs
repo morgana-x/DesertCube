@@ -143,7 +143,7 @@ namespace DesertCube.Modules.Bus
 
         public void SendBusSpeed(MCGalaxy.Player player)
         {
-            SendBusSpeed(player, (int)(BusSpeedGameWorld * 11500));
+            SendBusSpeed(player, (int)(BusSpeedGameWorld * 11300));
         }
         public void SendBusSpeed(MCGalaxy.Player player, int speed)
         {

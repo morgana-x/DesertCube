@@ -12,7 +12,6 @@ namespace DesertCube.Modules.Event.Events
             DesertCubePlugin.Bus.Broadcast("%eThere's a %csandstorm%e!");
             DesertCubePlugin.Bus.Broadcast("%cSlow down or we'll crash!!!");
             Weather.SetFog(16);
-            DayNight.OverrideFog = true;
             // Update fog colour
             DayNight.SendEnv(DesertCubePlugin.Bus.Level, DayNight.CurrentEnv); 
         }
@@ -21,7 +20,6 @@ namespace DesertCube.Modules.Event.Events
         {
             DesertCubePlugin.Bus.Broadcast("%eThe sandstorm is over!");
             Weather.SetFog();
-            DayNight.OverrideFog = false;
             // Update fog colour
             DayNight.SendEnv(DesertCubePlugin.Bus.Level, DayNight.CurrentEnv);
         }
