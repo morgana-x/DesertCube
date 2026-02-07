@@ -7,23 +7,28 @@ namespace DesertCube.Modules.Player
     {
         public override void Load()
         {
-            MCGalaxy.Events.PlayerEvents.OnPlayerMoveEvent.Register(OnPlayerMoveEvent, Priority.Normal);
         }
         public override void Unload()
         {
             MCGalaxy.Events.PlayerEvents.OnPlayerMoveEvent.Unregister(OnPlayerMoveEvent);
         }
-
-       // DateTime nextCheck = DateTime.Now;
+        public override void PostLoad()
+        {
+            MCGalaxy.Events.PlayerEvents.OnPlayerMoveEvent.Register(OnPlayerMoveEvent, Priority.Normal);
+        }
+        // DateTime nextCheck = DateTime.Now;
         private void OnPlayerMoveEvent(MCGalaxy.Player p, Position next, byte yaw, byte pitch, ref bool cancel)
         {
-            if (DesertCubePlugin.Bus.Level == null) return;
+            if (DesertCubePlugin.Bus == null) return;
             if (DesertCubePlugin.Bus.BusSpeed == 0) return;
             if (CheckPlayer(p))
-                next = DesertCubePlugin.Bus.Level.SpawnPos;
+            {
+                p.Pos = DesertCubePlugin.Bus.Level.SpawnPos;
+                p.SendPosition(DesertCubePlugin.Bus.Level.SpawnPos, p.Rot );
+                cancel = true;
+            }
+
         }
-
-
 
         /*public override void Tick(float curTime)
         {
@@ -40,10 +45,9 @@ namespace DesertCube.Modules.Player
 
         private bool CheckPlayer(MCGalaxy.Player player)
         {
-            if (player.Level.name != DesertCubePlugin.Config.BusLevel) return false;
             if (player.Game.Referee) return false;
+            if (player.Level != DesertCubePlugin.Bus.Level) return false;
             if (DesertCubePlugin.Bus.InsideBus(player)) return false;
-            player.SendPosition(DesertCubePlugin.Bus.Level.SpawnPos, player.Rot);
             return true;
         }
     }
