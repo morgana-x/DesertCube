@@ -8,13 +8,13 @@ namespace DesertCube.Commands
 {
     public class BusShopBuy : Command2
     {
-        public override string name => "purchase";
+        public override string name => "busbuy";
 
         public override string type => "Bus";
 
         public override LevelPermission defaultRank => LevelPermission.Guest;
 
-        public override CommandAlias[] Aliases => new CommandAlias[] { new CommandAlias("busbuy"), new CommandAlias("buy"), new CommandAlias("buspurchase") };
+        public override CommandAlias[] Aliases => new CommandAlias[] { new CommandAlias("purchase"), new CommandAlias("buy") };
         public override void Help(Player p)
         {
             p.Message("/buy &Ditem &Emessage");

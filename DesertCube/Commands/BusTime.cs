@@ -6,7 +6,7 @@ namespace DesertCube.Commands
 {
     public class BusTime : Command2
     {
-        public override string name => "bustime";
+        public override string name => "clock";
 
         public override string type => "Bus";
 
@@ -15,7 +15,7 @@ namespace DesertCube.Commands
         public override CommandAlias[] Aliases => new CommandAlias[] { new CommandAlias("clock"), new CommandAlias("gettime") };
         public override void Help(Player p)
         {
-            p.Message("/bustime");
+            p.Message("/clock");
         }
 
         public override void Use(Player p, string message)

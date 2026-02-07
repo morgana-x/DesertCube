@@ -5,16 +5,16 @@ namespace DesertCube.Commands
 {
     public class BusSpeed : Command2
     {
-        public override string name => "busspeed";
+        public override string name => "speed";
 
         public override string type => "Bus";
 
         public override LevelPermission defaultRank => LevelPermission.Guest;
 
-        public override CommandAlias[] Aliases => new CommandAlias[] { new CommandAlias("speed") };
+        public override CommandAlias[] Aliases => new CommandAlias[] { new CommandAlias("busspeed") };
         public override void Help(Player p)
         {
-            p.Message("/busspeed");
+            p.Message("/speed");
         }
 
         public override void Use(Player p, string message)

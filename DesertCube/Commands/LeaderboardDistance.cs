@@ -5,16 +5,16 @@ namespace DesertCube.Commands
 {
     public class LeaderboardDistance : LeaderboardCommand
     {
-        public override string name => "leaderboarddistance";
+        public override string name => "distboard";
 
         public override string type => "Bus";
 
         public override LevelPermission defaultRank => LevelPermission.Guest;
 
-        public override CommandAlias[] Aliases => new CommandAlias[] { new CommandAlias("distboard"), new CommandAlias("distleaderboard"),  new CommandAlias("leaderboarddist") };
+        public override CommandAlias[] Aliases => new CommandAlias[] { new CommandAlias("distanceleaderboard"), new CommandAlias("distleaderboard"),  new CommandAlias("leaderboarddist") };
         public override void Help(Player p)
         {
-            p.Message("/leaderboarddistance - get the top kilometers driven!");
+            p.Message("/distboard - get the top kilometers driven!");
         }
 
         static string FormatDistance(int dist)

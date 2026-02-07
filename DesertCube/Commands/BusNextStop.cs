@@ -7,7 +7,7 @@ namespace DesertCube.Commands
 {
     public class BusNextStop : Command2
     {
-        public override string name => "busnextstop";
+        public override string name => "nextstop";
 
         public override string type => "Bus";
 
@@ -16,7 +16,7 @@ namespace DesertCube.Commands
         public override CommandAlias[] Aliases => new CommandAlias[] { new CommandAlias("nextstop"), new CommandAlias("stop") };
         public override void Help(Player p)
         {
-            p.Message("/busnextstop");
+            p.Message("/nextstop");
         }
 
         public override void Use(Player p, string message)

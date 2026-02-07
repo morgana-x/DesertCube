@@ -7,11 +7,11 @@ namespace DesertCube.Commands
 {
     public class BusDistance : Command2
     {
-        public override string name => "busdistance";
+        public override string name => "distance";
 
         public override string type => "Bus";
 
-        public override CommandAlias[] Aliases => new CommandAlias[] { new CommandAlias("distance"), new CommandAlias("dist") };
+        public override CommandAlias[] Aliases => new CommandAlias[] { new CommandAlias("busdistance"), new CommandAlias("dist") };
 
         public override LevelPermission defaultRank => LevelPermission.Guest;
         public override void Help(Player p)
