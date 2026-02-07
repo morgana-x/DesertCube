@@ -22,7 +22,7 @@ namespace DesertCube.Commands
         public override void Use(Player p, string message)
         {
             if (DesertCubePlugin.Bus == null || DesertCubePlugin.Config == null) return;
-            p.Message($"%eThe bus will arrive at &6{Journey.DestinationName} &e in approx &d{Math.Round((DesertCubePlugin.Config.DestinationDistance/ DesertCubePlugin.Bus.BusSpeed)/60/60, 2).ToString("0")}%e hours at &d{Math.Round(DesertCubePlugin.Bus.BusSpeed,2)}m/s&e.");
+            p.Message($"%eThe bus will arrive at &6{Journey.DestinationName}&e in approx &d{Math.Round((Journey.RemainingDistance/ DesertCubePlugin.Bus.BusSpeed)/60/60, 2).ToString("0")}%e hours at &d{Math.Round(DesertCubePlugin.Bus.BusSpeed,2)}m/s&e.");
         }
     }
 }
