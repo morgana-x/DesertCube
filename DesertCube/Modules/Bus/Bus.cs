@@ -23,8 +23,8 @@ namespace DesertCube.Modules.Bus
         public Vec3U16 ButtonPosition = new Vec3U16(72, 21, 62);
         public Vec3U16 DoorPosition = new Vec3U16(69, 18, 56);
 
-        public Vec3U16 Min = new Vec3U16(50, 18, 56);
-        public Vec3U16 Max = new Vec3U16(72, 50, 64);
+        public Vec3U16 Min = new Vec3U16(51, 18, 57);
+        public Vec3U16 Max = new Vec3U16(72, 50, 63);
 
         DateTime nextDecel = DateTime.Now;
 
