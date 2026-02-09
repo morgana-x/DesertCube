@@ -33,10 +33,12 @@ namespace DesertCube.Modules.Player
             {
                 bool seated = IsSeated(player);
 
-                string model = seated ? "sit" : "humanoid";
+                bool cute = Shop.Shop.GetData(player.name)[0] == 1;
+                string model = seated ? (cute ? "sitcute" :"sit") : "humanoid";
 
                 if (player.Model == model) continue;
                 if (model == "humanoid" && player.Model.StartsWith("hold")) continue;
+
 
                 player.UpdateModel(model);
 

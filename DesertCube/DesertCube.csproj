@@ -93,6 +93,9 @@
     <None Update="models\shrub_large.bbmodel">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="models\sitcute.bbmodel">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
   <ItemGroup>

@@ -1,7 +1,10 @@
+Models:
+	- sitcute
+		- zoey https://github.com/NotAwesome2 / https://notawesome.cc/ 
 Textures:
 	- items
 		- Ludinko
-		
+
 Stops:
 	- bar.stop
 		- ScrantonWorkBus
