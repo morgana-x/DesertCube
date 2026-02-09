@@ -1,4 +1,5 @@
 ﻿using MCGalaxy;
+using MCGalaxy.Bots;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -50,14 +51,13 @@ namespace DesertCube.Modules.Desert
         {
             ["road_sign"] = new RoadSignModel("road_sign|4.5", "road_sign.png") { Chance =  0.05f},
             ["shrub"] = new RoadObjectModel("shrub|1.5", "shrub.png", posRange:32),
-            ["shrub_med"] = new RoadObjectModel("shrub|2.5", "shrub.png"),
-         //   ["grass"] = new RoadObjectModel("shrub|1.5", "grass.png", posRange: 32),
-          //  ["grass_med"] = new RoadObjectModel("shrub|2.5", "grass.png"),
+            ["shrub_med"] = new RoadObjectModel("shrub|2.5", "shrub.png")
         };
 
         public  static List<PlayerBot> SpawnedObjects;
 
-        const int spawnDistance = 2048;
+        internal const int spawnDistance = 1024;
+        internal const int despawnedYPos = -100;
         public override void Load()
         {
             SpawnedObjects = new List<PlayerBot>();
@@ -97,7 +97,7 @@ namespace DesertCube.Modules.Desert
             if (count > 100)
                 count = 0;
 
-            bot.SetInitialPos(new Position(32*(lvl.Width + spawnDistance), -2048, 0));
+            bot.SetInitialPos(new Position(32*(lvl.Width + spawnDistance), 32*RoadObjects.despawnedYPos, 0));
             
             PlayerBot.Add(bot, false);
             SpawnedObjects.Add(bot);
@@ -112,13 +112,18 @@ namespace DesertCube.Modules.Desert
             if (lvl == null) return;
 
             var m = Models[name];
-            bot.DisplayName = "";
-            bot.SkinName = m.Skin;
-            bot.SetModel(m.Model);
-            bot.GlobalSpawn();
+
+            if (bot.SkinName != m.Skin)
+            {
+                bot.SkinName = m.Skin;
+                bot.SetModel(m.Model);
+                bot.DisplayName = "";
+                bot.GlobalSpawn();
+            }
+            else if (m.Model != bot.Model)
+                bot.UpdateModel(bot.Model);
 
             var rnd_z = m.GetRandomPos(lvl);
-           // bot.autoBroadcastPosition = true;
             bot.Pos = new Position(32 * (lvl.Width + spawnDistance), (DesertCubePlugin.Bus.Level.Config.GetEnvProp(EnvProp.CloudsLevel) + 2) * 32, rnd_z * 32);
 
         }
@@ -138,47 +143,40 @@ namespace DesertCube.Modules.Desert
             }
             return k;
         }
-
-        public override void Tick(float curTime)
+        public override void Tick(float deltaTime)
         {
+            if (DesertCubePlugin.Bus == null) return;
+            if (DesertCubePlugin.Bus.Level == null) return;
             if (DesertCubePlugin.Bus.BusSpeed == 0) return;
             var lvl = DesertCubePlugin.Bus.Level;
 
-       
+            
+
             foreach (PlayerBot bot in SpawnedObjects.ToList())
             {
-                if (bot.Pos.Y == -2048)
+                if (bot.Pos.BlockY == RoadObjects.despawnedYPos)
                     continue;
 
                 bot.Pos = new Position(
-                    (int)(bot.Pos.X - (32 * curTime * DesertCubePlugin.Bus.BusSpeedGameWorld)),
+                    (int)(bot.Pos.X - (32 * deltaTime * DesertCubePlugin.Bus.BusSpeedInGame)),
                     bot.Pos.Y, 
-                    bot.Pos.Z)
-                 ;
+                    bot.Pos.Z);
+
                 if (bot.Pos.X <= (lvl != null ? -32 *(lvl.Width + spawnDistance) : -32* spawnDistance))
                 {
-                    //bot.autoBroadcastPosition = false;
-                    bot.Pos = new Position(32 * (lvl.Width + spawnDistance), -2048, 0);
-                   /* if (lvl != null)
-                    {
-                        foreach (var p in lvl.players)
-                        {
-                            p.EntityList.GetID(bot, out byte id);
-                            p.Send(Packet.Teleport(id, bot.Pos, bot.Rot, p.Supports("ExtEntityPositions")));
-                        }
-                    }*/
+                    bot.Pos = new Position(32 * (lvl.Width + spawnDistance), 32*RoadObjects.despawnedYPos, 0);
                     continue;
                 }
             }
 
             if (DateTime.Now > nextRoadObject)
             {
-                nextRoadObject = DateTime.Now.AddSeconds(rnd.Next(1, 3));
-                if (SpawnedObjects.Count < 15)
+                nextRoadObject = DateTime.Now.AddSeconds(4+(rnd.NextDouble()*2));
+                if (SpawnedObjects.Count < DesertCubePlugin.Config.MaxObjects)
                     CreateObject(getRandomModel());
                 else
                 {
-                    var bots = SpawnedObjects.Where((x) => { return x.Pos.Y == -2048; });
+                    var bots = SpawnedObjects.Where((x) => { return x.Pos.BlockY == RoadObjects.despawnedYPos; });
                     if (bots.Count() == 0) return;
                     SpawnObject(bots.First(), getRandomModel());
                 }

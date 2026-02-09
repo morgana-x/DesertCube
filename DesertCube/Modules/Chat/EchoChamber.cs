@@ -168,7 +168,7 @@ namespace DesertCube.Modules.Chat
         }
 
         DateTime nextAlert = DateTime.Now;
-        public override void Tick(float curTime)
+        public override void Tick(float deltaTime)
         {
             if (DateTime.Now < nextAlert) return;
             nextAlert = DateTime.Now.AddSeconds(10);

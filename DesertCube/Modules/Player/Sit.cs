@@ -24,7 +24,7 @@ namespace DesertCube.Modules.Player
         }
 
         DateTime nextSit = DateTime.Now;
-        public override void Tick(float curTime)
+        public override void Tick(float deltaTime)
         {
             if (DateTime.Now < nextSit) return;
             nextSit = DateTime.Now.AddSeconds(0.25f);

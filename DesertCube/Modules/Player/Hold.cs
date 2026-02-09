@@ -18,7 +18,7 @@ namespace DesertCube.Modules.Player
         }
 
         DateTime nextHold = DateTime.Now;
-        public override void Tick(float curTime)
+        public override void Tick(float deltaTime)
         {
             if (DateTime.Now < nextHold) return;
             nextHold = DateTime.Now.AddSeconds(0.45f);

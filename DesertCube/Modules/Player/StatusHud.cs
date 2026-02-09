@@ -61,7 +61,7 @@ namespace DesertCube.Modules.Player
         }
 
         DateTime nextStatus = DateTime.Now;
-        public override void Tick(float curTime)
+        public override void Tick(float deltaTime)
         {
             if (DateTime.Now < nextStatus) return;
             nextStatus = DateTime.Now.AddSeconds(1);

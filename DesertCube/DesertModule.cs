@@ -13,7 +13,7 @@ namespace DesertCube
         public abstract void Unload();
 
         public virtual void PostLoad() { }
-        public virtual void Tick(float curTime) { }
+        public virtual void Tick(float deltaTime) { }
 
         public static Dictionary<Type, DesertModule> LoadedModules = new Dictionary<Type, DesertModule>();
 
@@ -27,7 +27,7 @@ namespace DesertCube
             foreach (var type in classes.Where((x) => { return x.IsSubclassOf(typeof(DesertModule)); }))
                 AddModule(type);
 
-            TickTask = MCGalaxy.Server.MainScheduler.QueueRepeat(TickModules, null, TimeSpan.FromMilliseconds(30));
+            TickTask = MCGalaxy.Server.MainScheduler.QueueRepeat(TickModules, null, TimeSpan.FromMilliseconds(100));
         }
 
         public static void UnloadModules()
@@ -44,12 +44,12 @@ namespace DesertCube
         static void TickModules(SchedulerTask t)
         {
             TickTask = t;
-            float curTime = 1f - (float)t.Delay.TotalSeconds;
+            float deltaTime = 0.1f;//Math.Max(Math.Min((float)(0.1f), 0.15f),0.0167f); // 1f - (float)t.Delay.TotalSeconds;
             foreach (var m in LoadedModules.Values)
             {
                 try
                 {
-                    m.Tick(curTime);
+                    m.Tick(deltaTime);
                 }
                 catch (Exception e)
                 {

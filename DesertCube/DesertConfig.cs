@@ -20,8 +20,8 @@ namespace DesertCube
         [ConfigFloat("decceleration-rate", "Bus", 1f)]
         public float BusDecceleration  = 1f; // meters per second
 
-        [ConfigInt("max-objects", "Desert", 15)]
-        public int MaxObjects = 15;
+        [ConfigInt("max-objects", "Desert", 10)]
+        public int MaxObjects = 10;
 
         [ConfigInt("distance", "Journey", 580000, min:1)]
         public int DestinationDistance  = 580000; // Meters

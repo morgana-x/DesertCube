@@ -54,7 +54,7 @@ namespace DesertCube.Modules.Desert
         }
 
         static DateTime nextTick = DateTime.Now;
-        public override void Tick(float curTime)
+        public override void Tick(float deltaTime)
         {
             if (DateTime.Now < nextTick) return;
             nextTick = DateTime.Now.AddSeconds(1);

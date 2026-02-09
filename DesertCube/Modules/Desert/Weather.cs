@@ -18,7 +18,7 @@ namespace DesertCube.Modules.Desert
             MCGalaxy.Events.PlayerEvents.OnSentMapEvent.Unregister(OnSentMap);
         }
 
-        public override void Tick(float curTime)
+        public override void Tick(float deltaTime)
         {
             if (!Changed) return;
             Changed = false;

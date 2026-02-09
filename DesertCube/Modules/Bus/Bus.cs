@@ -13,8 +13,8 @@ namespace DesertCube.Modules.Bus
     public class Bus : DesertModule
     {
         public volatile float BusSpeed = 0;
+        public float BusSpeedInGame => BusSpeed * 4f;
 
-        public float BusSpeedGameWorld => BusSpeed * 0.35f;
 
         private SchedulerTask tickTask;
 
@@ -143,7 +143,7 @@ namespace DesertCube.Modules.Bus
 
         public void SendBusSpeed(MCGalaxy.Player player)
         {
-            SendBusSpeed(player, (int)(BusSpeedGameWorld * 11300));
+            SendBusSpeed(player, (int)(BusSpeedInGame * 395));
         }
         public void SendBusSpeed(MCGalaxy.Player player, int speed)
         {
