@@ -9,7 +9,7 @@ namespace DesertCube.Modules.Shop.Items
         public override string Name => "LoginMessage";
         public LogInMessageItem()
         {
-            Price = 5;
+            Price = 1;
         }
         public override void Purchase(MCGalaxy.Player p, string message = "")
         {
@@ -41,7 +41,7 @@ namespace DesertCube.Modules.Shop.Items
         public override string Name => "LogoutMessage";
         public LogOutMessageItem()
         {
-            Price = 5;
+            Price = 1;
         }
         public override void Purchase(MCGalaxy.Player p, string message = "")
         {

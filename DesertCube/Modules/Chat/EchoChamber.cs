@@ -120,12 +120,14 @@ namespace DesertCube.Modules.Chat
 
         public override void Load()
         {
-            OnChatEvent.Register(HandleChatEvent, Priority.Low);
+            OnChatEvent.Register(HandleChatEvent, Priority.High);
+            OnChatFromEvent.Register(HandleChatEvent, Priority.High);
         }
 
         public override void Unload()
         {
             OnChatEvent.Unregister(HandleChatEvent);
+            OnChatFromEvent.Unregister(HandleChatEvent);
         }
 
         static string obfuscate(string w)

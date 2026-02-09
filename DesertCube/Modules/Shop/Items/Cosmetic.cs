@@ -1,9 +1,4 @@
 ﻿using DesertCube.Modules.Player;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DesertCube.Modules.Shop.Items
 {
@@ -11,7 +6,7 @@ namespace DesertCube.Modules.Shop.Items
     {
         public override string Name => "SitCute";
 
-        public SitCute() { Price = 10; }
+        public SitCute() { Price = 3; }
         public override void Purchase(MCGalaxy.Player p, string message = "")
         {
             var data = Shop.GetData(p.name);
