@@ -69,7 +69,7 @@ namespace DesertCube.Modules.Player
 
         public static void EmitEffect(MCGalaxy.Player p, byte id)
         {
-            var posy = p.Model != "sit" ? p.Pos.Y : p.Pos.Y - 15;
+            var posy = p.Model != "sit" && p.Model != "sitecute" ? p.Pos.Y : p.Pos.Y - 15;
             var packet = MCGalaxy.Network.Packet.SpawnEffect(id, p.Pos.X / 32f, posy / 32f, p.Pos.Z / 32f, p.Pos.X / 32f, posy / 32f, p.Pos.Z / 32f);
             foreach (var pl in PlayerInfo.Online.Items)
             {
