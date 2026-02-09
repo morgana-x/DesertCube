@@ -17,8 +17,8 @@ namespace DesertCube.Modules.Server
             "%eDo %d/speed%e to get the bus speed!",
             "%eUse %d/clock%e to get the time!",
         };
-
-        public static int index = 0;
+        private static System.Random rnd = new System.Random();
+        public static int index = rnd.Next(0, Hints.Count);
         public override void Load()
         {
         }
@@ -26,7 +26,7 @@ namespace DesertCube.Modules.Server
         {
         }
 
-        DateTime nextHint = DateTime.Now;
+        DateTime nextHint = DateTime.Now.AddMinutes(5);
         public override void Tick(float curTime)
         {
             if (DateTime.Now < nextHint)
