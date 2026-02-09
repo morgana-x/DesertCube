@@ -1,39 +1,121 @@
 ﻿using MCGalaxy.Events.ServerEvents;
 using MCGalaxy;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace DesertCube.Modules.Chat
 {
     public class EchoChamber : DesertModule
     {
-        static string[] badwords = new string[]{
-            "ojhhfs",
-            "ojh4s",
-            "o2h4s",
-            "o2hfs",
-            "o2hhfs",
-            "ojhmfu",
-            "o2hmfu",
-            "ojhm4u",
-            "o2hh4s",
-            "o2hm4u",
-            "ifjmijumfs",
-            "i4jmi2um4s",
-            "ifjmi2um4s",
-            "ifjmi2umfs",
-            "ifjmijum4s",
-            "ibufojhfs",
-            "ibufo2h4s",
-            "ibufojh4s",
-            "ibufo2hfs",
-            "ibufcmbdlqfpqmf",
-            "ibufcmAdlqfpqmf",
-            "ibufcmAdlq41qm4",
-            "hbtuifkfx",
-            "hbtuifk4x",
-            "gvdlcmbdlqfpqmf",
-            "gvdlcmAdlqfpqmf",
-            "usbooz",
+        static Dictionary<string,string[]> badwords = new Dictionary<string, string[]>()
+        {
+            ["slurs"] = new string[]{
+                "ojhhfs",
+                "ojh4s",
+                "o2h4s",
+                "o2hfs",
+                "o2hhfs",
+                "ojhmfu",
+                "o2hmfu",
+                "ojhm4u",
+                "o2hh4s",
+                "o2hm4u",
+                "ojhhb",
+                "ojhhA",
+                "o2hhb",
+                "o2hhA",
+                "ibufojhfs",
+                "ibufo2h4s",
+                "ibufojh4s",
+                "ibufo2hfs",
+                "ibufcmbdlqfpqmf",
+                "ibufcmAdlqfpqmf",
+                "ibufcmAdlq41qm4",
+                "gvdlcmbdlqfpqmf",
+                "gvdlcmAdlqfpqmf",
+            },
+            ["nsfw"] = new string[]{
+                "mpwfqpso",
+                "xbouupxbudiqpso",
+                "mpwfq1so",
+                "m1wfq1so",
+                "jmjlfqpso",
+                "zpvmjlfqpso",
+                "qpsophsbqiz",
+                "q1sophsAqiz",
+                "q1so1hsAqiz",
+                "jmjlfifoubj",
+                "jmpwfifoubj",
+                "jmpwfujuzt",
+                "xbudiifoubj",
+                "nbtuvscbuf",
+                "nAtuvscbuf",
+                "nAbtuvscbu4",
+                "nAbtuvscAu4",
+                "nAb6uvscAuf",
+                "nbtuvscbujoh",
+                "nbtufscbujoh",
+                "nbtuvscbu2oh",
+                "nAtuvscAujoh",
+                "nbtufscbuf",
+                "nbtufscbu4",
+                "nAtufscbu4",
+                "qpsoivc",
+                "q1soivc",
+                "q1so",
+                "ifoubjibwfo",
+                "ibntufs/yyy",
+                "esjqqjohxjuidvn",
+                "esjqqjohdvn",
+                "mpwfcjhdpdl",
+                "mpwftcjhdpdl",
+                "mpwftcjhejdl",
+                "mpwfcjhejdl",
+                "mpwfcjhqfojt",
+                "mpwftcjhqfojt",
+                "kfsljohpggup",
+                "mpwfkfsljohpgg",
+                "mjlfkfsljohpgg",
+            },
+            ["transphobic stuff"] = new string[]{
+                "gbhhpu",
+                "gAhh1u",
+                "usboozgbh",
+                "usbooz",
+                "gAh",
+            },
+            ["nazi things"] = new string[]{
+                "ijumfsxbtsjhiu",
+                "i2um4s",
+                "ifjmijumfs",
+                "i4jmi2um4s",
+                "ifjmi2um4s",
+                "ifjmi2umfs",
+                "ifjmijum4s",
+                "hbtuifkfx",
+                "hbtuifk4x",
+            },
+            ["antisemetic stuff"] = new string[]{
+                "tuvqjekfx",
+                "tuvqjek4x",
+                "jibufkfx",
+                "gvdlkfx",
+                "gvdlk4x",
+                "jibufk43",
+            },
+            ["islamophobic stuff"] = new string[]{
+                "tuvqjebsbc",
+            },
+            ["requesting social accounts"] = new string[]{
+                "nzjotubjt",
+                "nzjotubhsbnjt",
+                "epzpvibwfjotubhsbn",
+                "epftbozpofibwfjotubhsbn",
+                "jotuAhsAn",
+                "2otuAhsAn",
+                "nztobqdibujt",
+            },
         };
 
         public override void Load()
@@ -55,21 +137,32 @@ namespace DesertCube.Modules.Chat
             return res;
         }
 
-        bool filterEcho(MCGalaxy.Player pl, object args) => pl.Extras.GetBoolean("IsRacist");
+
+       
 
         void HandleChatEvent(ChatScope scope, MCGalaxy.Player source, ref string msg, object arg, ref ChatMessageFilter filter, bool relay = false)
         {
             string obf = obfuscate(msg.Replace(" ", "").Trim());
-            foreach (var w in badwords)
-                if (obf.Contains(w))
-                {
-                    // Let them have the illusion of being a succesful edgelord / rage baiter (and then be confused as to why no one is mad)
-                    relay = false;
-                    source.Extras["SlurAmount"] = source.Extras.GetInt("SlurAmount") + 1;
-                    source.Extras["IsRacist"] = true;
-                    filter = filterEcho;
-                    break;
-                }
+
+            foreach (var c in badwords)
+                foreach (var w in c.Value)
+                    if (obf.Contains(w))
+                    {
+                        bool filterEcho(MCGalaxy.Player pl, object args) => (pl == source || (c.Key != "requesting social accounts" && pl.Extras.GetBoolean("IsRacist")));
+                        // Let them have the illusion of being a succesful edgelord / rage baiter (and then be confused as to why no one is mad)
+                        relay = false;
+
+                        string recentCat = source.Extras.GetString("SlurCategory","");
+
+                        source.Extras["SlurCategory"] = recentCat + (!recentCat.Contains(c.Key) ? c.Key + ";" : "");
+                        source.Extras["SlurAmount"] = source.Extras.GetInt("SlurAmount") + 1;
+
+                        if (c.Key != "requesting social accounts")
+                            source.Extras["IsRacist"] = true;
+                        
+                        filter = filterEcho;
+                        break;
+                    }
         }
 
         DateTime nextAlert = DateTime.Now;
@@ -83,8 +176,12 @@ namespace DesertCube.Modules.Chat
                 int numSlurs = p.Extras.GetInt("SlurAmount");
                 if (numSlurs == 0) continue;
 
-                MCGalaxy.Chat.MessageOps($"&c{p.name} &etried saying &cslurs &ein &d{numSlurs}&e msg{(numSlurs > 1 ? "s" : "")}!");
+                string[] slurcats = p.Extras.GetString("SlurCategory","slurs;").TrimEnd(';').Split(';');
+
+                MCGalaxy.Chat.MessageOps($"&c{p.name} &etried saying &c{slurcats.First()} {(slurcats.Length == 2 ? $"+ {slurcats[1]} " : slurcats.Length > 2 ? "+ more! " : "")}&ein &d{numSlurs}&e msg{(numSlurs > 1 ? "s" : "")}!");
+                
                 p.Extras["SlurAmount"] = 0;
+                p.Extras["SlurCategory"] = "";
             }
         }
     }
