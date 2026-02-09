@@ -22,7 +22,14 @@ namespace DesertCube.Commands
         public override void Use(Player p, string message)
         {
             if (DesertCubePlugin.Bus == null || DesertCubePlugin.Config == null) return;
-            p.Message($"%eThe bus will arrive at &6{Journey.DestinationName}&e in approx &d{Math.Round((Journey.RemainingDistance/ DesertCubePlugin.Bus.BusSpeed)/60/60, 2).ToString("0")}%e hours at &d{Math.Round(DesertCubePlugin.Bus.BusSpeed,2)}m/s&e.");
+            if (DesertCubePlugin.Bus.BusSpeed == 0)
+            {
+                p.Message("&WUnable to give eta when bus is stationary!");
+                return;
+            }
+            var seconds = Journey.RemainingDistance / DesertCubePlugin.Bus.BusSpeed;
+            string format = (seconds > 3600) ? ((float)seconds / 60 / 60).ToString("0.#") + " hours" : (((int)(seconds / 60)).ToString()) + " minutes";
+            p.Message($"%eThe bus will arrive at &6{Journey.DestinationName}&e in approx &d{format}%e at &d{Math.Round(DesertCubePlugin.Bus.BusSpeed,2)}m/s&e.");
         }
     }
 }
