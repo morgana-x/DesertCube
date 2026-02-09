@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DesertCube.Modules.Player;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -30,6 +31,7 @@ namespace DesertCube.Modules.Shop.Items
                 return;
 
             Shop.ModifyData(p.name, 1, 0);
+            Stats.AddPoints(p.name, -Price);
             p.Message("Purchased sit cute! Purchase this again to toggle it for free whenever!");
         }
     }
