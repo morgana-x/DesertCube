@@ -69,6 +69,12 @@
     <None Update="DesertBus\texturepacks\desertbushd.zip">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="models\headlights.bbmodel">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="models\headlights.ccmodel">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="models\insect.bbmodel">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
