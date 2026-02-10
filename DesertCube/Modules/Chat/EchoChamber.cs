@@ -51,9 +51,18 @@ namespace DesertCube.Modules.Chat
                 "gvdljohojokb",
                 "jibufojokbt",
                 "tuvqjeojokb",
+                "cmAdl",
+                "tuvqjeo2okb",
+                "cmbdlo2h",
+                "cmAdlo2h",
+                "cmAdlojokb",
+                "cmAdlhvz",
             },
             ["possiblyaccidentalracism"] = new string[]{
                 "cmbdlojhiu",
+            },
+            ["pedophillia"] = new string[]{
+                "jupvdiljet",
             },
             ["nsfw"] = new string[]{
                 "mpwfqpso",
@@ -90,16 +99,17 @@ namespace DesertCube.Modules.Chat
                 "esjqqjohdvn",
                 "dvnnjoh",
                 "kfsljohpgg",
-                "mpwfkfsljohpgg",
-                "mjlfkfsljohpgg",
-                "hpoobkfslpgg",
-                "k4slpgg",
-                "k4sl1gg",
+                "k4sl",
                 "k4sljoh",
                 "k4sl2oh",
                 "k4sl2o:",
                 "cjhdpdl",
                 "cjhqfojt",
+                "sbqf",
+                "ejmep",
+                "ibwftfy",
+                "mftcjbocpoebhf",
+                "kfslpgg",
             },
             ["transphobic stuff"] = new string[]{
                 "gbhhpu",
@@ -121,6 +131,7 @@ namespace DesertCube.Modules.Chat
             },
             ["antisemetic stuff"] = new string[]{
                 "tuvqjekfx",
+                "tuvqjek4x",
                 "tuvqjek4x",
                 "jibufkfx",
                 "gvdlkfx",
@@ -148,13 +159,13 @@ namespace DesertCube.Modules.Chat
         public override void Load()
         {
             OnChatEvent.Register(HandleChatEvent, Priority.High);
-            OnChatFromEvent.Register(HandleChatEvent, Priority.High);
+        //    OnChatFromEvent.Register(HandleChatEvent, Priority.High);
         }
 
         public override void Unload()
         {
             OnChatEvent.Unregister(HandleChatEvent);
-            OnChatFromEvent.Unregister(HandleChatEvent);
+         //   OnChatFromEvent.Unregister(HandleChatEvent);
         }
 
         static string obfuscate(string w)
