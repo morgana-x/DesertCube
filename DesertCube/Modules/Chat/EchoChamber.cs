@@ -156,6 +156,7 @@ namespace DesertCube.Modules.Chat
             },
         };
 
+
         public override void Load()
         {
             OnChatEvent.Register(HandleChatEvent, Priority.High);
