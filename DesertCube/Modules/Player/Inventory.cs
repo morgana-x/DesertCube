@@ -111,20 +111,21 @@ namespace DesertCube.Modules.Player
         {
             if (player.Level.name != DesertCubePlugin.Config.BusLevel) return;
             if (!player.Session.hasCpe) return;
-    
+
             var inventory = GetInventory(player.name);
 
             List<byte> bulk = new List<byte>();
             ushort x = 1;
             for (ushort i = 0; i < 767; i++)
-                 bulk.AddRange(Packet.SetInventoryOrder(Block.Air, i, player.Session.hasExtBlocks));
-
-            foreach (var pair in inventory)
             {
-                bulk.AddRange(Packet.SetInventoryOrder(pair.Key, x, player.Session.hasExtBlocks));
+                if (!inventory.ContainsKey(i))
+                {
+                    bulk.AddRange(Packet.SetInventoryOrder(Block.Air, i, player.Session.hasExtBlocks));
+                    continue;
+                }
+                bulk.AddRange(Packet.SetInventoryOrder(Convert.ToUInt16(i), x, player.Session.hasExtBlocks));
                 x++;
             }
-
             player.Send(bulk.ToArray());
         }
         public static void SendInventory(MCGalaxy.Player player)
