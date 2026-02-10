@@ -63,6 +63,19 @@ namespace DesertCube.Modules.Chat
             },
             ["pedophillia"] = new string[]{
                 "jupvdiljet",
+                "jupvdifeljet",
+                "jmjlfljet",
+                "jmpwfljet",
+                "upvdidijmesfo",
+                "upvdidijmet",
+                "upvdifedijmesfo",
+                "upvdifedijmet",
+                "jmjlfeljet",
+                "jmpwfeljet",
+                "jmjlfmpmjdpo",
+                "jxbudimpmjdpo",
+                "fwfsupvdifeljet",
+                "fwfsupvdifedijmesfo",
             },
             ["nsfw"] = new string[]{
                 "mpwfqpso",
@@ -110,6 +123,7 @@ namespace DesertCube.Modules.Chat
                 "ibwftfy",
                 "mftcjbocpoebhf",
                 "kfslpgg",
+                "jnnbupvdiijn",
             },
             ["transphobic stuff"] = new string[]{
                 "gbhhpu",
@@ -155,6 +169,7 @@ namespace DesertCube.Modules.Chat
                 "xibutzpvsejtdpsebddpvou",
             },
         };
+
 
 
         public override void Load()
