@@ -57,9 +57,18 @@ namespace DesertCube.Modules.Chat
                 "cmAdlo2h",
                 "cmAdlojokb",
                 "cmAdlhvz",
+                "zpvsnpnjtcmbdl",
+                "zpvsnvnjtcmbdl",
+                "zpvsebejtcmbdl",
+                "!ojh!",
+                "zpvsfbojhfsjb",
+                "zpvojhfsjb",
+                "jibufojhfs",
             },
             ["possiblyaccidentalracism"] = new string[]{
                 "cmbdlojhiu",
+                "!ojhfs!",
+                "ojhfsjb",
             },
             ["pedophillia"] = new string[]{
                 "jupvdiljet",
@@ -124,6 +133,13 @@ namespace DesertCube.Modules.Chat
                 "mftcjbocpoebhf",
                 "kfslpgg",
                 "jnnbupvdiijn",
+                "tvdlnzcbmm",
+                "nzcbmmtivsu",
+                "nzfbscbmmtivsu",
+                "tmfquxjui",
+                "tvdlnzejdl",
+                "wbhjob",
+                "tvdlnzwbh",
             },
             ["transphobic stuff"] = new string[]{
                 "gbhhpu",
@@ -156,6 +172,14 @@ namespace DesertCube.Modules.Chat
                 "tuvqjebsbc",
                 "gvdlhb{b",
             },
+            ["weirdo"] = new string[]{
+                "qppqtjf",
+            },
+            ["immature"] = new string[]{
+                "!qpp!",
+                "zpvebejthbz",
+                "zpvsebejthbz",
+            },
             ["requesting social accounts"] = new string[]{
                 "nzjotubjt",
                 "nzjotubhsbnjt",
@@ -169,9 +193,6 @@ namespace DesertCube.Modules.Chat
                 "xibutzpvsejtdpsebddpvou",
             },
         };
-
-
-
         public override void Load()
         {
             OnChatEvent.Register(HandleChatEvent, Priority.High);
@@ -199,10 +220,10 @@ namespace DesertCube.Modules.Chat
         void HandleChatEvent(ChatScope scope, MCGalaxy.Player source, ref string msg, object arg, ref ChatMessageFilter filter, bool relay = false)
         {
             string obf = obfuscate(msg.Replace(" ", "").Trim());
-
+            string obfspaces = obfuscate(msg);
             foreach (var c in badwords)
                 foreach (var w in c.Value)
-                    if (obf.Contains(w))
+                    if (obf.Contains(w) || obfspaces.Contains(w))
                     {
                         bool filterEcho(MCGalaxy.Player pl, object args) => (pl == source || (c.Key != "requesting social accounts" && pl.Extras.GetBoolean("IsRacist")));
                         // Let them have the illusion of being a succesful edgelord / rage baiter (and then be confused as to why no one is mad)
@@ -213,7 +234,7 @@ namespace DesertCube.Modules.Chat
                         source.Extras["SlurCategory"] = recentCat + (!recentCat.Contains(c.Key) ? c.Key + ";" : "");
                         source.Extras["SlurAmount"] = source.Extras.GetInt("SlurAmount") + 1;
 
-                        if (c.Key != "requesting social accounts")
+                        if (c.Key != "requesting social accounts" && c.Key != "weirdo" && c.Key != "immature" && c.Key != "possiblyaccidentalracism")
                             source.Extras["IsRacist"] = true;
                         
                         filter = filterEcho;
